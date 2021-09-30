@@ -156,25 +156,16 @@ def define_key_auto():
     print("d =", d)
 
 
-# def check_gcd(number_1, number_2):  # gcd = ggT
-#     time = 0
-#     while not number_1 == 0 and time < timeTriggerGGT:
-#         time += 1
-#         rest = number_2 % number_1
-#         number_2 = number_1
-#         number_1 = rest
-
-
-def check_variables(e, phi_n, d):
+def check_error(e, phi_n, d):
     if not (0 <= e <= N-1):
-        return "error"
+        return f"Error 1: e does not satisfy the following:\n0 <= e <= N-1, where N = {N}"
     if not (math.gcd(e, phi_n) == 1):
-        return "error"
+        return f"Error 1: e does not satisfy the following:\ngcd(e, 𝜑(n)) = 1, where 𝜑(n) = {phi_n}"
     if not (0 <= d <= N-1):
-        return "error"
-    if not ((e*d)%phi_n==1):
-        return "error"
-    return True
+        return f"Error 1: d does not satisfy the following:\n0 <= d <= N-1, where N = {N}"
+    if not ((e*d) % phi_n == 1):
+        return f"Error 1: e does not satisfy the following:\ne ∙ d ≡ mod(𝜑(n)), where 𝜑(n) = {phi_n} and d = {d}"
+    return False
 
 
 def define_key():
@@ -182,57 +173,35 @@ def define_key():
     global N
     global phi_n
     global d
+    d = 0
     p = input_prime(False, 1)  # Eingabe von p
     q = input_prime(False, 2)  # Eingabe von Q
     while p == q:
+        error = "Error 1: q does not satisfy the following:\np ≠ q"
         messagebox.showerror(
-            'RSA', 'Du darfst keine gleichen Zahlen auswählen.\nBitte gib eine neue Zahl ein.')
+            "RSA", f"The following error occured:\n{error} \n\nplease try again")
         q = input_prime(False, 2)  # Eingabe von Q
     N = p*q
     phi_n = (p-1)*(q-1)
-    e = Dialogs.input_Int(root, 'Encipher Zahl',
-                          'Was ist deine "encipher" Zahl? (e)', "27")
+    while True:
+        e = Dialogs.input_Int(root, 'Encipher Zahl',
+                              'Was ist deine "encipher" Zahl? (e)', "27")
+        if 0 <= e <= N-1:
+            d = 1
+            while not (e*d) % phi_n == 1:
+                d += 1
+        error = check_error(e, phi_n, d)
+        if error:
+            messagebox.showerror(
+                "RSA", f"The following error occured:\n{error} \n\nplease try again")
+        else:
+            break
 
-    # check_gcd(e, phi_n)
-    _e = e  # ggT herausfinden
-    _phi_n = phi_n
-    time = 0
-    while not _e == 0 and time < timeTriggerGGT:
-        time += 1
-        rest = _phi_n % _e
-        _phi_n = _e
-        _e = rest
-    while 1 > e or e >= N or _phi_n != 1:  # Zahl 'e' prüfen
-        if _phi_n != 1:
-            message = []
-            e = Dialogs.input_Int(
-                root, "Encipher Zahl", 'Du darfst keine Zahle, die den ggt von ihr und "p*q" , 1 gibt gebrauchen.\nBitte gib eine neue Zahle für "e" ein.\nWas ist deine "encipher" Zahl? (e)', "")
-            _e = e  # ggT herausfinden
-            _phi_n = phi_n
-            time = 0
-            while not _e == 0 and time < timeTriggerGGT:
-                time = time+1
-                rest = _phi_n % _e
-                _phi_n = _e
-                _e = rest
-        if 1 > e:
-            e = Dialogs.input_Int(
-                root, "Encipher Zahl", 'Du darfst keine Zahle kleiner als 1 auswählen.\nBitte gib eine neue Zahle für "e" ein.\nWas ist deine "encipher" Zahl? (e)', "")
-        if e >= N:
-            e = Dialogs.input_Int(
-                root, "Encipher Zahl", 'Du darfst keine Zahle grösser als "p*q" auswählen.\nBitte gib eine neue Zahle für "e" ein.\nWas ist deine "encipher" Zahl? (e)', "")
-    message = ["e = ", str(e), "N = ", str(N)]
-    message = "".join(message)
-    string_e_N = tk.Label(root, text=message)
+    string_e_N = tk.Label(root, text=f"e = {e}\nN = {N}")
     string_e_N.place(x=250, y=60, width=150, height=80)
-    #    msgDlg('Dein öffentlicher Schlüssel ist:\nN =',N,'\ne =',e)
-    d = 1
-    while not (e*d) % phi_n == 1:
-        d = d+1
-    message = ["d = ", str(d)]
-    message = "".join(message)
-    string_d = tk.Label(root, text=message)
-    string_d.place(x=150, y=250, width=200, height=100)
+
+    string_d = tk.Label(root, text=f"d = {d}")
+    string_d.place(x=150, y=250, width=150, height=50)
 
 
 def encrypt():
