@@ -7,10 +7,12 @@ from tkinter import Tk, Label, Entry, Button, END, mainloop, IntVar, Toplevel, m
 
 prt = None
 
+
 class input_something():
     global prt
+
     def __init__(self, parent=None, title='Verschlüsselung', msg='Schreibe eine Zahl',
-              initial_value='Tippen Sie eine Zahl ein.'):
+                 initial_value='Tippen Sie eine Zahl ein.'):
         if parent == None:
             self.window = Tk()
         else:
@@ -25,7 +27,7 @@ class input_something():
         self.integer.insert(0, initial_value)
 
         self.ok_button = Button(self.window, text='Ok', command=self.ok)
-        self.ok_button.place(x = 50, y=150, width=100, height=30)
+        self.ok_button.place(x=50, y=150, width=100, height=30)
         # self.window.grab_set_global()
         while prt == None:
             self.window.update_idletasks()
@@ -36,55 +38,59 @@ class input_something():
         global prt
         prt = self.integer.get()
         self.window.destroy()
-        
+
+
 def input_Int(parent=None, title='Verschlüsselung', msg='Schreibe eine Zahl',
               initial_value='Tippen Sie eine Zahl ein.'):
     global prt
     input_something(parent=parent, title=title, msg=msg,
-              initial_value=initial_value)
+                    initial_value=initial_value)
     a = prt
     prt = None
     return(int(a))
+
 
 def input_Str(parent=None, title="Verschlüsselung", msg="Schreibe etwas!",
               initial_value="Tippen Sie etwa herein."):
     global prt
     input_something(parent=parent, title=title, msg=msg,
-              initial_value=initial_value)
+                    initial_value=initial_value)
     a = prt
     prt = None
     return(str(a))
 
+
 if __name__ == "__main__":
     # print(ord(str(1)))
     # print(chr(49))
-    h = input_Int(None, 'RSA','Was ist die tiefste Zufallszahl?', initial_value='100')
+    h = input_Int(None, 'RSA', 'Was ist die tiefste Zufallszahl?',
+                  initial_value='100')
     print(h)
     # print("h.prt =", h.prt)
 
 
 ##window = Tk()
-##def test():
+# def test():
 ##    global n
-##    n=0
+# n=0
 ##    a = Entry(window)
-##    a.pack()
+# a.pack()
 ##
 ##
-##    
-##test()
+##
+# test()
 ##
 ##import os
 ##
-##class Dialog(Toplevel):
+# class Dialog(Toplevel):
 ##
-##    def __init__(self, parent, title = None):
+# def __init__(self, parent, title = None):
 ##
 ##        Toplevel.__init__(self, parent)
-##        self.transient(parent)
+# self.transient(parent)
 ##
-##        if title:
-##            self.title(title)
+# if title:
+# self.title(title)
 ##
 ##        self.parent = parent
 ##
@@ -94,34 +100,34 @@ if __name__ == "__main__":
 ##        self.initial_focus = self.body(body)
 ##        body.pack(padx=5, pady=5)
 ##
-##        self.buttonbox()
+# self.buttonbox()
 ##
-##        self.grab_set()
+# self.grab_set()
 ##
-##        if not self.initial_focus:
+# if not self.initial_focus:
 ##            self.initial_focus = self
 ##
 ##        self.protocol("WM_DELETE_WINDOW", self.cancel)
 ##
-##        self.geometry("+%d+%d" % (parent.winfo_windowx()+50,
-##                                  parent.winfo_windowy()+50))
+# self.geometry("+%d+%d" % (parent.winfo_windowx()+50,
+# parent.winfo_windowy()+50))
 ##
-##        self.initial_focus.focus_set()
+# self.initial_focus.focus_set()
 ##
-##        self.wait_window(self)
+# self.wait_window(self)
 ##
 ##    #
-##    # construction hooks
+# construction hooks
 ##
-##    def body(self, master):
-##        # create dialog body.  return widget that should have
-##        # initial focus.  this method should be overridden
+# def body(self, master):
+# create dialog body.  return widget that should have
+# initial focus.  this method should be overridden
 ##
-##        pass
+# pass
 ##
-##    def buttonbox(self):
-##        # add standard button box. override if you don't want the
-##        # standard buttons
+# def buttonbox(self):
+# add standard button box. override if you don't want the
+# standard buttons
 ##
 ##        box = Frame(self)
 ##
@@ -133,37 +139,37 @@ if __name__ == "__main__":
 ##        self.bind("<Return>", self.ok)
 ##        self.bind("<Escape>", self.cancel)
 ##
-##        box.pack()
+# box.pack()
 ##
 ##    #
-##    # standard button semantics
+# standard button semantics
 ##
-##    def ok(self, event=None):
+# def ok(self, event=None):
 ##
-##        if not self.validate():
-##            self.initial_focus.focus_set() # put focus back
-##            return
+# if not self.validate():
+# self.initial_focus.focus_set() # put focus back
+# return
 ##
-##        self.withdraw()
-##        self.update_idletasks()
+# self.withdraw()
+# self.update_idletasks()
 ##
-##        self.apply()
+# self.apply()
 ##
-##        self.cancel()
+# self.cancel()
 ##
-##    def cancel(self, event=None):
+# def cancel(self, event=None):
 ##
-##        # put focus back to the parent window
-##        self.parent.focus_set()
-##        self.destroy()
+# put focus back to the parent window
+# self.parent.focus_set()
+# self.destroy()
 ##
 ##    #
-##    # command hooks
+# command hooks
 ##
-##    def validate(self):
+# def validate(self):
 ##
-##        return 1 # override
+# return 1 # override
 ##
-##    def apply(self):
+# def apply(self):
 ##
-##        pass # override
+# pass # override
