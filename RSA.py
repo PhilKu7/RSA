@@ -58,18 +58,16 @@ def check_prime(number, is_random_prime, count=1):
                     break
     else:
         if number <= 1:
-            message = ["Die von dir eingegebene Zahl ", str(
-                number), " ist keine Primzahl.\nBitte eine ander eingeben."]
-            message = "".join(message)
-            messagebox.showerror("Verschluesselungserror", message)
+            error = f"Error 1: The number you entered ({number}) was not a prime."
+            messagebox.showerror(
+                "RSA", f"The following error occured:\n{error} \n\nplease try again")
             n = input_prime(is_random_prime, count)
         else:
             for i in range(2, int(sqrt(number))+1):
                 if number*1.0 % i == 0:
-                    message = ["Die von dir eingegebene Zahl ", str(
-                        number), " ist keine Primzahl.\nBitte eine ander eingeben."]
-                    message = "".join(message)
-                    messagebox.showerror("Verschluesselungserror", message)
+                    error = f"Error 1: The number you entered ({number}) was not a prime."
+                    messagebox.showerror(
+                        "RSA", f"The following error occured:\n{error} \n\nplease try again")
                     n = input_prime(is_random_prime, count)
                     break
     if n != None:
@@ -84,13 +82,11 @@ def input_prime(is_random_prime, count=1):
         n = check_prime(n, is_random_prime)
     else:
         if count == 1:
-            n = Dialogs.input_Int(root, "Primzahl eintippen",
-                                  "Was ist deine erste Primzahl? (p)", "11")
-            n = check_prime(n, is_random_prime, count)
+            n = check_prime(Dialogs.input_Int(root, "Enter prime",
+                                              "What is your first prime number? (p)", "11"), False, count)
         elif count == 2:
-            n = Dialogs.input_Int(root, "Primzahl eintippen",
-                                  "Was ist deine zweite Primzahl? (q)", "5")
-            n = check_prime(n, is_random_prime, count)
+            n = check_prime(Dialogs.input_Int(root, "Enter prime",
+                                              "What is your second prime number? (q)", "17"), False, count)
     return n
 
 
@@ -184,8 +180,8 @@ def define_key():
     N = p*q
     phi_n = (p-1)*(q-1)
     while True:
-        e = Dialogs.input_Int(root, 'Encipher Zahl',
-                              'Was ist deine "encipher" Zahl? (e)', "27")
+        e = Dialogs.input_Int(root, 'Encipher number',
+                              'What is your encipher number? (e)', "7")
         if 0 <= e <= N-1:
             d = 1
             while not (e*d) % phi_n == 1:
@@ -206,46 +202,41 @@ def define_key():
 
 def encrypt():
     mString = Dialogs.input_Str(
-        root, "Verschlüsselung", 'Was wollen sie verschlüsseln?', "Hallo")
+        root, "Encryption", 'What do you want to encrypt?', "Hello World!")
     m = []
+    for n in mString:
+        m.append(ord(n))
+    print(f"Message = {m}")
     if letters_sepperately == True:
-        for n in range(len(mString)):
-            m.append(ord(mString[n]))
-        # m = ord(mString)
-        print("m =", m)
         C = []
-        for n in range(len(m)):
-            C.append(m[n]**e % N)
-        # C = (m**e) % N
-    Dialogs.input_Str(root, "Verschlüsselung",
-                      "Ihr verschlüsselter Text lautet:", C)
+        for n in m:
+            C.append(n**e % N)
+    Dialogs.input_Str(root, "Encryption",
+                      "Your encrypted message:", C)
 
 
 def decrypt():
-    C = Dialogs.input_Str(root, "Verschlüsselung",
-                          'Was wollen sie entschlüsseln?', "")
+    C = Dialogs.input_Str(root, "Encryption",
+                          'What do you want to decrypt?', "")
     C_list = []
     first = 0
     for n in range(len(C)):
         if C[n] == " ":
             C_list.append(C[first:n])
-            first = n
+            first = n+1
     C_list.append(C[first:])
-    print(C_list)
+    print(f"C = {C_list}")
     message = []
-    for n in range(len(C_list)):
-        letter = int(C_list[n])**d % N
-        print("letter", n, "=", letter, chr(letter))
+    for n in C_list:
+        letter = int(n)**d % N
         message.append(chr(letter))
-    # m = (C**d) % N
-    # print("m = ", message)
-    # message = chr(m)
+        print(f"decrypt({n}) = {letter} = {message[-1]}")
     end_message = ""
     for n in range(len(message)):
-        if message[n] != " ":
-            end_message = end_message + message[n]
-    Dialogs.input_Str(root, "Verschlüsselung",
-                      "Ihr entschlüsselter Text lautet:", end_message)
+        # if message[n] != " ":
+        end_message = end_message + message[n]
+    Dialogs.input_Str(root, "Encryption",
+                      "Your decrypted message:", end_message)
 
 
 button_define_key = tk.Button(root, text=label_define_key[4], command=define_key,
