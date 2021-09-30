@@ -1,4 +1,5 @@
-from math import fmod, sqrt
+from math import fmod, sqrt, gcd
+import math
 import random
 import Dialogs
 import tkinter as tk
@@ -101,7 +102,7 @@ def waiting():
 def define_key_auto():
     global e
     global N
-    global a
+    global phi_n
     global h
     global g
     global d
@@ -115,10 +116,10 @@ def define_key_auto():
         p = input_prime(True)  # Eingabe von p
     print("p =", p, "q =", q)
     N = p*q
-    a = (p-1)*(q-1)
-    e = random.randint(2, a-1)
+    phi_n = (p-1)*(q-1)
+    e = random.randint(2, phi_n-1)
     bb = e  # ggT herausfinden
-    aa = a
+    aa = phi_n
     time = 0
     while bb != 0 and time < timeTriggerGGT:
         time = time+1
@@ -127,9 +128,9 @@ def define_key_auto():
         bb = rest
     while 1 > e or e >= N or aa != 1:  # Zahl 'e' prüfen
         if aa != 1:
-            e = random.randint(2, a-1)
+            e = random.randint(2, phi_n-1)
             bb = e  # ggT herausfinden
-            aa = a
+            aa = phi_n
             time = 0
             while not bb == 0 and time < timeTriggerGGT:
                 time = time+1
@@ -137,16 +138,16 @@ def define_key_auto():
                 aa = bb
                 bb = rest
         if 1 > e:
-            e = random.randint(2, a-1)
+            e = random.randint(2, phi_n-1)
         if e >= N:
-            e = random.randint(2, a-1)
+            e = random.randint(2, phi_n-1)
     message = ["e = ", str(e), "N = ", str(N)]
     message = "".join(message)
     string_e_N = tk.Label(root, text=message)
     string_e_N.place(x=250, y=60, width=150, height=80)
     print("e =", e, "N =", N)
     d = 1
-    while not (e*d) % a == 1:
+    while not (e*d) % phi_n == 1:
         d = d+1
     message = ["d = ", str(d)]
     message = "".join(message)
@@ -155,42 +156,65 @@ def define_key_auto():
     print("d =", d)
 
 
+# def check_gcd(number_1, number_2):  # gcd = ggT
+#     time = 0
+#     while not number_1 == 0 and time < timeTriggerGGT:
+#         time += 1
+#         rest = number_2 % number_1
+#         number_2 = number_1
+#         number_1 = rest
+
+
+def check_variables(e, phi_n, d):
+    if not (0 <= e <= N-1):
+        return "error"
+    if not (math.gcd(e, phi_n) == 1):
+        return "error"
+    if not (0 <= d <= N-1):
+        return "error"
+    if not ((e*d)%phi_n==1):
+        return "error"
+    return True
+
+
 def define_key():
     global e
     global N
-    global a
+    global phi_n
     global d
     p = input_prime(False, 1)  # Eingabe von p
     q = input_prime(False, 2)  # Eingabe von Q
     while p == q:
         messagebox.showerror(
-            'RSA', 'Du darfst keine gleichen Zahlen auswählen.\nBitte gib neue Zahlen ein.')
+            'RSA', 'Du darfst keine gleichen Zahlen auswählen.\nBitte gib eine neue Zahl ein.')
         q = input_prime(False, 2)  # Eingabe von Q
     N = p*q
-    a = (p-1)*(q-1)
+    phi_n = (p-1)*(q-1)
     e = Dialogs.input_Int(root, 'Encipher Zahl',
                           'Was ist deine "encipher" Zahl? (e)', "27")
-    bb = e  # ggT herausfinden
-    aa = a
+
+    # check_gcd(e, phi_n)
+    _e = e  # ggT herausfinden
+    _phi_n = phi_n
     time = 0
-    while not bb == 0 and time < timeTriggerGGT:
-        time = time+1
-        rest = aa % bb
-        aa = bb
-        bb = rest
-    while 1 > e or e >= N or aa != 1:  # Zahl 'e' prüfen
-        if aa != 1:
+    while not _e == 0 and time < timeTriggerGGT:
+        time += 1
+        rest = _phi_n % _e
+        _phi_n = _e
+        _e = rest
+    while 1 > e or e >= N or _phi_n != 1:  # Zahl 'e' prüfen
+        if _phi_n != 1:
             message = []
             e = Dialogs.input_Int(
                 root, "Encipher Zahl", 'Du darfst keine Zahle, die den ggt von ihr und "p*q" , 1 gibt gebrauchen.\nBitte gib eine neue Zahle für "e" ein.\nWas ist deine "encipher" Zahl? (e)', "")
-            bb = e  # ggT herausfinden
-            aa = a
+            _e = e  # ggT herausfinden
+            _phi_n = phi_n
             time = 0
-            while not bb == 0 and time < timeTriggerGGT:
+            while not _e == 0 and time < timeTriggerGGT:
                 time = time+1
-                rest = aa % bb
-                aa = bb
-                bb = rest
+                rest = _phi_n % _e
+                _phi_n = _e
+                _e = rest
         if 1 > e:
             e = Dialogs.input_Int(
                 root, "Encipher Zahl", 'Du darfst keine Zahle kleiner als 1 auswählen.\nBitte gib eine neue Zahle für "e" ein.\nWas ist deine "encipher" Zahl? (e)', "")
@@ -203,7 +227,7 @@ def define_key():
     string_e_N.place(x=250, y=60, width=150, height=80)
     #    msgDlg('Dein öffentlicher Schlüssel ist:\nN =',N,'\ne =',e)
     d = 1
-    while not (e*d) % a == 1:
+    while not (e*d) % phi_n == 1:
         d = d+1
     message = ["d = ", str(d)]
     message = "".join(message)
