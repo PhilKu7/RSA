@@ -107,6 +107,20 @@ def check_error(e, phi_n, d):
     return False
 
 
+def prime_factors(n):
+    return_list = []
+    while n % 2 == 0:
+        return_list.append(n)
+        n = n / 2
+    for i in range(3, int(math.sqrt(n))+1, 2):
+        while n % i == 0:
+            return_list.append(n)
+            n = n / i
+    if n > 2:
+        return_list.append(n)
+    return return_list
+
+
 def define_key_auto():
     global e
     global N
@@ -114,6 +128,8 @@ def define_key_auto():
     global h
     global g
     global d
+    global factored_d
+    global factored_e
     h = Dialogs.input_Int(
         root, "RSA", "What is your lower bound for your random numbers?", "10")
     g = Dialogs.input_Int(
@@ -135,6 +151,8 @@ def define_key_auto():
         error = check_error(e, phi_n, d)
         if not error:
             break
+    factored_d = prime_factors(d)
+    factored_e = prime_factors(e)
     string_e_N = tk.Label(root, text=f"e = {e}\nN = {N}")
     string_e_N.place(x=250, y=60, width=150, height=80)
 
@@ -147,6 +165,8 @@ def define_key():
     global N
     global phi_n
     global d
+    global factored_d
+    global factored_e
     d = 0
     p = input_prime(False, 1)
     q = input_prime(False, 2)
@@ -171,6 +191,8 @@ def define_key():
         else:
             break
 
+    factored_d = prime_factors(d)
+    factored_e = prime_factors(e)
     string_e_N = tk.Label(root, text=f"e = {e}\nN = {N}")
     string_e_N.place(x=250, y=60, width=150, height=80)
 
@@ -179,16 +201,19 @@ def define_key():
 
 
 def encrypt():
-    mString = Dialogs.input_Str(
+    message_string = Dialogs.input_Str(
         root, "Encryption", "What do you want to encrypt?", "Hello World!")
-    m = []
-    for n in mString:
-        m.append(ord(n))
-    print(f"Message = {m}")
+    message = []
+    for n in message_string:
+        message.append(ord(n))
+    print(f"Message = {message}")
     if letters_sepperately == True:
         C = []
-        for n in m:
-            C.append(n**e % N)
+        for n in message:
+            encrypted_char = n
+            for m in factored_e:
+                encrypted_char = encrypted_char**m % N
+            C.append(encrypted_char)
     Dialogs.input_Str(root, "Encryption",
                       "Your encrypted message:", C)
 
@@ -206,9 +231,11 @@ def decrypt():
     print(f"C = {C_list}")
     message = []
     for n in C_list:
-        letter = int(n)**d % N
-        message.append(chr(letter))
-        print(f"decrypt({n}) = {letter} = {message[-1]}")
+        decrypted_char = int(n)
+        for m in factored_d:
+            decrypted_char = decrypted_char**m % N
+        message.append(chr(decrypted_char))
+        print(f"decrypt({n}) = {decrypted_char} = {message[-1]}")
     end_message = ""
     for n in range(len(message)):
         end_message = end_message + message[n]
