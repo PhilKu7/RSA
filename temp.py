@@ -1,14 +1,13 @@
 from tkinter import *
 
 
-
 def _on_click(self, event):
     text.tag_remove("highlight", "1.0", "end")
     text.tag_add("highlight", "insert wordstart", "insert wordend")
 
+
 root = Tk()
 root.geometry('500x200')
-
 
 
 text = Text(root)
