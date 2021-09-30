@@ -12,8 +12,8 @@ root_width = 750
 root_height = 500
 root_borderwidth = 10
 root = tk.Tk()
-root.title('RSA Verschlüsselung')
-root.geometry(''.join([str(root_width), 'x', str(root_height)]))
+root.title("RSA Verschlüsselung")
+root.geometry("".join([str(root_width), "x", str(root_height)]))
 
 letters_sepperately = True
 
@@ -26,22 +26,22 @@ root.config(menu=menu)
 
 
 def not_yet_programmed():
-    messagebox.showerror('Verschlüsselungs editor',
-                         'Ist noch nicht programmiert!')
+    messagebox.showerror("Verschlüsselungs editor",
+                         "Ist noch nicht programmiert!")
 
 
 # firstMenu = Menu(menu)
-# menu.add_cascade(label='Verschlüsselungen', menu=firstMenu)
-# firstMenu.add_command(label='Cäsar-Verschlüsselung',
+# menu.add_cascade(label="Verschlüsselungen", menu=firstMenu)
+# firstMenu.add_command(label="Cäsar-Verschlüsselung",
 #                       command=not_yet_programmed)
-# firstMenu.add_command(label='Cäsar mit Schlüsselwort Verschlüsselung',
+# firstMenu.add_command(label="Cäsar mit Schlüsselwort Verschlüsselung",
 #                       command=not_yet_programmed)
-# firstMenu.add_command(label='Polyalphabetische-Verschlüsselung',
+# firstMenu.add_command(label="Polyalphabetische-Verschlüsselung",
 #                       command=not_yet_programmed)
-# firstMenu.add_command(label='Vignière-Verschlüsselung',
+# firstMenu.add_command(label="Vignière-Verschlüsselung",
 #                       command=not_yet_programmed)
 # firstMenu.add_separator()
-# firstMenu.add_command(label='Skytale', command=not_yet_programmed)
+# firstMenu.add_command(label="Skytale", command=not_yet_programmed)
 
 zentrierDivisor = 100000
 
@@ -91,65 +91,8 @@ def input_prime(is_random_prime, count=1):
 
 
 def waiting():
-    messagebox.showerror('Verschlüsselungs editor',
-                         'Immer noch am berechnen!')
-
-
-def define_key_auto():
-    global e
-    global N
-    global phi_n
-    global h
-    global g
-    global d
-    h = Dialogs.input_Int(
-        root, 'RSA', 'Was ist die tiefste Zufallszahl?', "10")
-    g = Dialogs.input_Int(
-        root, 'RSA', 'Was ist die höchste Zufallszahl?', "100")
-    p = input_prime(True)  # Eingabe von p
-    q = input_prime(True)  # Eingabe von Q
-    while p == q:
-        p = input_prime(True)  # Eingabe von p
-    print("p =", p, "q =", q)
-    N = p*q
-    phi_n = (p-1)*(q-1)
-    e = random.randint(2, phi_n-1)
-    bb = e  # ggT herausfinden
-    aa = phi_n
-    time = 0
-    while bb != 0 and time < timeTriggerGGT:
-        time = time+1
-        rest = aa % bb
-        aa = bb
-        bb = rest
-    while 1 > e or e >= N or aa != 1:  # Zahl 'e' prüfen
-        if aa != 1:
-            e = random.randint(2, phi_n-1)
-            bb = e  # ggT herausfinden
-            aa = phi_n
-            time = 0
-            while not bb == 0 and time < timeTriggerGGT:
-                time = time+1
-                rest = aa % bb
-                aa = bb
-                bb = rest
-        if 1 > e:
-            e = random.randint(2, phi_n-1)
-        if e >= N:
-            e = random.randint(2, phi_n-1)
-    message = ["e = ", str(e), "N = ", str(N)]
-    message = "".join(message)
-    string_e_N = tk.Label(root, text=message)
-    string_e_N.place(x=250, y=60, width=150, height=80)
-    print("e =", e, "N =", N)
-    d = 1
-    while not (e*d) % phi_n == 1:
-        d = d+1
-    message = ["d = ", str(d)]
-    message = "".join(message)
-    string_d = tk.Label(root, text=message)
-    string_d.place(x=150, y=250, width=200, height=100)
-    print("d =", d)
+    messagebox.showerror("Verschlüsselungs editor",
+                         "Immer noch am berechnen!")
 
 
 def check_error(e, phi_n, d):
@@ -164,24 +107,59 @@ def check_error(e, phi_n, d):
     return False
 
 
+def define_key_auto():
+    global e
+    global N
+    global phi_n
+    global h
+    global g
+    global d
+    h = Dialogs.input_Int(
+        root, "RSA", "What is your lower bound for your random numbers?", "10")
+    g = Dialogs.input_Int(
+        root, "RSA", "What is your upper bound for your random numbers?", "100")
+    p = input_prime(True)
+    q = input_prime(True)
+    while p == q:
+        p = input_prime(True)
+    print(f"p = {p}, q = {q}")
+    N = p*q
+    phi_n = (p-1)*(q-1)
+    e = 1
+    while e < N:
+        # e = random.randint(2, phi_n-1)
+        e += 1
+        d = 1
+        while not ((e*d) % phi_n == 1) and d < N:
+            d += 1
+        error = check_error(e, phi_n, d)
+        if not error:
+            break
+    string_e_N = tk.Label(root, text=f"e = {e}\nN = {N}")
+    string_e_N.place(x=250, y=60, width=150, height=80)
+
+    string_d = tk.Label(root, text=f"d = {d}")
+    string_d.place(x=150, y=250, width=150, height=50)
+
+
 def define_key():
     global e
     global N
     global phi_n
     global d
     d = 0
-    p = input_prime(False, 1)  # Eingabe von p
-    q = input_prime(False, 2)  # Eingabe von Q
+    p = input_prime(False, 1)
+    q = input_prime(False, 2)
     while p == q:
         error = "Error 1: q does not satisfy the following:\np ≠ q"
         messagebox.showerror(
             "RSA", f"The following error occured:\n{error} \n\nplease try again")
-        q = input_prime(False, 2)  # Eingabe von Q
+        q = input_prime(False, 2)
     N = p*q
     phi_n = (p-1)*(q-1)
     while True:
-        e = Dialogs.input_Int(root, 'Encipher number',
-                              'What is your encipher number? (e)', "7")
+        e = Dialogs.input_Int(root, "Encipher number",
+                              "What is your encipher number? (e)", "7")
         if 0 <= e <= N-1:
             d = 1
             while not (e*d) % phi_n == 1:
@@ -202,7 +180,7 @@ def define_key():
 
 def encrypt():
     mString = Dialogs.input_Str(
-        root, "Encryption", 'What do you want to encrypt?', "Hello World!")
+        root, "Encryption", "What do you want to encrypt?", "Hello World!")
     m = []
     for n in mString:
         m.append(ord(n))
@@ -217,7 +195,7 @@ def encrypt():
 
 def decrypt():
     C = Dialogs.input_Str(root, "Encryption",
-                          'What do you want to decrypt?', "")
+                          "What do you want to decrypt?", "")
     C_list = []
     first = 0
     for n in range(len(C)):
@@ -233,33 +211,32 @@ def decrypt():
         print(f"decrypt({n}) = {letter} = {message[-1]}")
     end_message = ""
     for n in range(len(message)):
-        # if message[n] != " ":
         end_message = end_message + message[n]
     Dialogs.input_Str(root, "Encryption",
                       "Your decrypted message:", end_message)
 
 
 button_define_key = tk.Button(root, text=label_define_key[4], command=define_key,
-                              background='#FFFF00', activebackground='#FFF000',  cursor='exchange', borderwidth=5)
+                              background="#FFFF00", activebackground="#FFF000",  cursor="exchange", borderwidth=5)
 button_define_key.place(x=root_x_start+root_borderwidth,
                         y=root_height-root_borderwidth -
                         label_define_key[2],
                         width=label_define_key[3], height=label_define_key[2])
 
 button_define_key_auto = tk.Button(root, text=label_define_key_auto[4], command=define_key_auto,
-                                   background='#FFFF00', activebackground='#FFF000', cursor='exchange', borderwidth=5)
+                                   background="#FFFF00", activebackground="#FFF000", cursor="exchange", borderwidth=5)
 button_define_key_auto.place(x=root_width-root_borderwidth-label_define_key_auto[3],
                              y=root_height-root_borderwidth -
                              label_define_key_auto[2],
                              width=label_define_key_auto[3], height=label_define_key_auto[2])
 
 button_encrypt = tk.Button(root, text=label_encrypt_text[4], command=encrypt,
-                           background='#7CFC00', activebackground='#80FF07',  cursor='exchange', borderwidth=5)
+                           background="#7CFC00", activebackground="#80FF07",  cursor="exchange", borderwidth=5)
 button_encrypt.place(
     x=root_width/2-label_encrypt_text[3]/2, y=label_encrypt_text[1], width=label_encrypt_text[3], height=label_encrypt_text[2])
 
 button_decrypt = tk.Button(root, text=label_decrypt_text[4], command=decrypt,
-                           background='#40E0D0', activebackground='#48D1CC', cursor='exchange', borderwidth=5)
+                           background="#40E0D0", activebackground="#48D1CC", cursor="exchange", borderwidth=5)
 button_decrypt.place(
     x=root_width/2-label_decrypt_text[3]/2, y=label_decrypt_text[1], width=label_decrypt_text[3], height=label_decrypt_text[2])
 
