@@ -18,12 +18,7 @@ root.geometry(a)
 
 letters_sepperately = True
 
-feldSchluesselSelbstDefinieren = [0, 0, 50, 200, 'Schlüssel selbst definieren',
-                                  'yellow']  # (x, y, height, width)
-feldSchluesselAutomatischDefinieren = [300, 0, 50, 200,
-                                       'Schlüssel automatisch definieren',
-                                       'yellow']  # (x, y, height, width)
-feldTextInZahlVerschluesseln = [1]
+label_text_to_number_encrypt = [1]
 timeTriggerGGT = 10000000
 
 
@@ -31,7 +26,7 @@ menu = tk.Menu(root)
 root.config(menu=menu)
 
 
-def nochNichtProgrammiert():
+def not_yet_programmed():
     messagebox.showerror('Verschlüsselungs editor',
                          'Ist noch nicht programmiert!')
 
@@ -39,15 +34,15 @@ def nochNichtProgrammiert():
 firstMenu = Menu(menu)
 menu.add_cascade(label='Verschlüsselungen', menu=firstMenu)
 firstMenu.add_command(label='Cäsar-Verschlüsselung',
-                      command=nochNichtProgrammiert)
+                      command=not_yet_programmed)
 firstMenu.add_command(label='Cäsar mit Schlüsselwort Verschlüsselung',
-                      command=nochNichtProgrammiert)
+                      command=not_yet_programmed)
 firstMenu.add_command(label='Polyalphabetische-Verschlüsselung',
-                      command=nochNichtProgrammiert)
+                      command=not_yet_programmed)
 firstMenu.add_command(label='Vignière-Verschlüsselung',
-                      command=nochNichtProgrammiert)
+                      command=not_yet_programmed)
 firstMenu.add_separator()
-firstMenu.add_command(label='Skytale', command=nochNichtProgrammiert)
+firstMenu.add_command(label='Skytale', command=not_yet_programmed)
 
 zentrierDivisor = 100000
 
@@ -262,19 +257,19 @@ def decrypt():
                       "Ihr entschlüsselter Text lautet:", end_message)
 
 
-button_define_key = tk.Button(root, text=feldSchluesselSelbstDefinieren[4], command=define_key,
+button_define_key = tk.Button(root, text=label_define_key[4], command=define_key,
                               background='#FFFF00', activebackground='#FFF000',  cursor='exchange', borderwidth=5)
 button_define_key.place(x=root_x_start+root_borderwidth,
                         y=root_height-root_borderwidth -
-                        feldSchluesselSelbstDefinieren[2],
-                        width=feldSchluesselSelbstDefinieren[3], height=feldSchluesselSelbstDefinieren[2])
+                        label_define_key[2],
+                        width=label_define_key[3], height=label_define_key[2])
 
-button_define_key_auto = tk.Button(root, text=feldSchluesselAutomatischDefinieren[4], command=define_key_auto,
+button_define_key_auto = tk.Button(root, text=label_define_key_auto[4], command=define_key_auto,
                                    background='#FFFF00', activebackground='#FFF000', cursor='exchange', borderwidth=5)
-button_define_key_auto.place(x=root_width-root_borderwidth-feldSchluesselAutomatischDefinieren[3],
+button_define_key_auto.place(x=root_width-root_borderwidth-label_define_key_auto[3],
                              y=root_height-root_borderwidth -
-                             feldSchluesselAutomatischDefinieren[2],
-                             width=feldSchluesselAutomatischDefinieren[3], height=feldSchluesselAutomatischDefinieren[2])
+                             label_define_key_auto[2],
+                             width=label_define_key_auto[3], height=label_define_key_auto[2])
 
 button_encrypt = tk.Button(root, text=label_encrypt_text[4], command=encrypt,
                            background='#7CFC00', activebackground='#80FF07',  cursor='exchange', borderwidth=5)
