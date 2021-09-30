@@ -3,6 +3,8 @@ import random
 import Dialogs
 import tkinter as tk
 from tkinter import simpledialog, messagebox, Menu
+from styles import *
+
 root_x_start = 0
 root_y_start = 0
 root_width = 750
@@ -50,15 +52,15 @@ firstMenu.add_command(label='Skytale', command=nochNichtProgrammiert)
 zentrierDivisor = 100000
 
 
-def primzahl_pruefen(zahl, random_prime, anzahl=1):
+def check_prime(zahl, random_prime, anzahl=1):
     n = None
     if random_prime == True:
         if zahl <= 1:
-            n = eingabe(random_prime)
+            n = input_prime(random_prime)
         else:
             for i in range(2, int(sqrt(zahl))+1):
                 if zahl*1.0 % i == 0:
-                    n = eingabe(random_prime)
+                    n = input_prime(random_prime)
                     break
     else:
         if zahl <= 1:
@@ -66,7 +68,7 @@ def primzahl_pruefen(zahl, random_prime, anzahl=1):
                 zahl), " ist keine Primzahl.\nBitte eine ander eingeben."]
             message = "".join(message)
             messagebox.showerror("Verschluesselungserror", message)
-            n = eingabe(random_prime, anzahl)
+            n = input_prime(random_prime, anzahl)
         else:
             for i in range(2, int(sqrt(zahl))+1):
                 if zahl*1.0 % i == 0:
@@ -74,7 +76,7 @@ def primzahl_pruefen(zahl, random_prime, anzahl=1):
                         zahl), " ist keine Primzahl.\nBitte eine ander eingeben."]
                     message = "".join(message)
                     messagebox.showerror("Verschluesselungserror", message)
-                    n = eingabe(random_prime, anzahl)
+                    n = input_prime(random_prime, anzahl)
                     break
     if n != None:
         return n
@@ -82,19 +84,19 @@ def primzahl_pruefen(zahl, random_prime, anzahl=1):
         return zahl
 
 
-def eingabe(random_prime, anzahl=1):
+def input_prime(random_prime, anzahl=1):
     if random_prime == True:
         n = random.randint(h, g)
-        n = primzahl_pruefen(n, random_prime)
+        n = check_prime(n, random_prime)
     else:
         if anzahl == 1:
             n = Dialogs.input_Int(root, "Primzahl eintippen",
                                   "Was ist deine erste Primzahl? (p)", "11")
-            n = primzahl_pruefen(n, random_prime, anzahl)
+            n = check_prime(n, random_prime, anzahl)
         elif anzahl == 2:
             n = Dialogs.input_Int(root, "Primzahl eintippen",
                                   "Was ist deine zweite Primzahl? (q)", "5")
-            n = primzahl_pruefen(n, random_prime, anzahl)
+            n = check_prime(n, random_prime, anzahl)
     return n
 
 
@@ -103,7 +105,7 @@ def waiting():
                          'Immer noch am berechnen!')
 
 
-def schluesselDefinierenAutomatisch():
+def define_key_auto():
     global e
     global N
     global a
@@ -114,10 +116,10 @@ def schluesselDefinierenAutomatisch():
         root, 'RSA', 'Was ist die tiefste Zufallszahl?', "10")
     g = Dialogs.input_Int(
         root, 'RSA', 'Was ist die höchste Zufallszahl?', "100")
-    p = eingabe(True)  # Eingabe von p
-    q = eingabe(True)  # Eingabe von Q
+    p = input_prime(True)  # Eingabe von p
+    q = input_prime(True)  # Eingabe von Q
     while p == q:
-        p = eingabe(True)  # Eingabe von p
+        p = input_prime(True)  # Eingabe von p
     print("p =", p, "q =", q)
     N = p*q
     a = (p-1)*(q-1)
@@ -160,17 +162,17 @@ def schluesselDefinierenAutomatisch():
     print("d =", d)
 
 
-def schluesselDefinieren():
+def define_key():
     global e
     global N
     global a
     global d
-    p = eingabe(False, 1)  # Eingabe von p
-    q = eingabe(False, 2)  # Eingabe von Q
+    p = input_prime(False, 1)  # Eingabe von p
+    q = input_prime(False, 2)  # Eingabe von Q
     while p == q:
         messagebox.showerror(
             'RSA', 'Du darfst keine gleichen Zahlen auswählen.\nBitte gib neue Zahlen ein.')
-        q = eingabe(False, 2)  # Eingabe von Q
+        q = input_prime(False, 2)  # Eingabe von Q
     N = p*q
     a = (p-1)*(q-1)
     e = Dialogs.input_Int(root, 'Encipher Zahl',
@@ -216,7 +218,7 @@ def schluesselDefinieren():
     string_d.place(x=150, y=250, width=200, height=100)
 
 
-def verschluesseln():
+def encrypt():
     mString = Dialogs.input_Str(
         root, "Verschlüsselung", 'Was wollen sie verschlüsseln?', "Hallo")
     m = []
@@ -231,10 +233,9 @@ def verschluesseln():
         # C = (m**e) % N
     Dialogs.input_Str(root, "Verschlüsselung",
                       "Ihr verschlüsselter Text lautet:", C)
-    # messagebox.showinfo('Ihr verschlüsselter Text lautet:\n', C)
 
 
-def entschluesseln():
+def decrypt():
     C = Dialogs.input_Str(root, "Verschlüsselung",
                           'Was wollen sie entschlüsseln?', "")
     C_list = []
@@ -259,37 +260,31 @@ def entschluesseln():
             end_message = end_message + message[n]
     Dialogs.input_Str(root, "Verschlüsselung",
                       "Ihr entschlüsselter Text lautet:", end_message)
-    # messagebox.showinfo('Ihr Text lautet:\n', message)
 
 
-feldTextVerschluesseln = [
-    312, 200, 30, 124, 'Text verschlüsseln', 'lightgreen']  # (x, y, height, width)
-# (x, y, height, width)
-feldTextEntschluesseln = [312, 300, 30, 124, 'Text entschlüsseln', 'lightblue']
+button_define_key = tk.Button(root, text=feldSchluesselSelbstDefinieren[4], command=define_key,
+                              background='#FFFF00', activebackground='#FFF000',  cursor='exchange', borderwidth=5)
+button_define_key.place(x=root_x_start+root_borderwidth,
+                        y=root_height-root_borderwidth -
+                        feldSchluesselSelbstDefinieren[2],
+                        width=feldSchluesselSelbstDefinieren[3], height=feldSchluesselSelbstDefinieren[2])
 
-schluesselDefinierenKnopf = tk.Button(root, text=feldSchluesselSelbstDefinieren[4], command=schluesselDefinieren,
-                                      background='#FFFF00', activebackground='#FFF000',  cursor='exchange', borderwidth=5)
-schluesselDefinierenKnopf.place(x=root_x_start+root_borderwidth,
-                                y=root_height-root_borderwidth -
-                                feldSchluesselSelbstDefinieren[2],
-                                width=feldSchluesselSelbstDefinieren[3], height=feldSchluesselSelbstDefinieren[2])
+button_define_key_auto = tk.Button(root, text=feldSchluesselAutomatischDefinieren[4], command=define_key_auto,
+                                   background='#FFFF00', activebackground='#FFF000', cursor='exchange', borderwidth=5)
+button_define_key_auto.place(x=root_width-root_borderwidth-feldSchluesselAutomatischDefinieren[3],
+                             y=root_height-root_borderwidth -
+                             feldSchluesselAutomatischDefinieren[2],
+                             width=feldSchluesselAutomatischDefinieren[3], height=feldSchluesselAutomatischDefinieren[2])
 
-schluesselDefinierenAutomatischKnopf = tk.Button(root, text=feldSchluesselAutomatischDefinieren[4], command=schluesselDefinierenAutomatisch,
-                                                 background='#FFFF00', activebackground='#FFF000', cursor='exchange', borderwidth=5)
-schluesselDefinierenAutomatischKnopf.place(x=root_width-root_borderwidth-feldSchluesselAutomatischDefinieren[3],
-                                           y=root_height-root_borderwidth -
-                                           feldSchluesselAutomatischDefinieren[2],
-                                           width=feldSchluesselAutomatischDefinieren[3], height=feldSchluesselAutomatischDefinieren[2])
+button_encrypt = tk.Button(root, text=label_encrypt_text[4], command=encrypt,
+                           background='#7CFC00', activebackground='#80FF07',  cursor='exchange', borderwidth=5)
+button_encrypt.place(
+    x=root_width/2-label_encrypt_text[3]/2, y=label_encrypt_text[1], width=label_encrypt_text[3], height=label_encrypt_text[2])
 
-verschluesselnKnopf = tk.Button(root, text=feldTextVerschluesseln[4], command=verschluesseln,
-                                background='#7CFC00', activebackground='#80FF07',  cursor='exchange', borderwidth=5)
-verschluesselnKnopf.place(
-    x=root_width/2-feldTextVerschluesseln[3]/2, y=feldTextVerschluesseln[1], width=feldTextVerschluesseln[3], height=feldTextVerschluesseln[2])
-
-entschluesselnKnopf = tk.Button(root, text=feldTextEntschluesseln[4], command=entschluesseln,
-                                background='#40E0D0', activebackground='#48D1CC', cursor='exchange', borderwidth=5)
-entschluesselnKnopf.place(
-    x=root_width/2-feldTextEntschluesseln[3]/2, y=feldTextEntschluesseln[1], width=feldTextEntschluesseln[3], height=feldTextEntschluesseln[2])
+button_decrypt = tk.Button(root, text=label_decrypt_text[4], command=decrypt,
+                           background='#40E0D0', activebackground='#48D1CC', cursor='exchange', borderwidth=5)
+button_decrypt.place(
+    x=root_width/2-label_decrypt_text[3]/2, y=label_decrypt_text[1], width=label_decrypt_text[3], height=label_decrypt_text[2])
 
 
 if __name__ == "__main__":
