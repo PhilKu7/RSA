@@ -1,3 +1,3 @@
-import RSAPythonv2 as RSA
+import RSA as RSA
 
 RSA.root.mainloop()
