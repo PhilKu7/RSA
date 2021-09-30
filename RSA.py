@@ -10,11 +10,9 @@ root_y_start = 0
 root_width = 750
 root_height = 500
 root_borderwidth = 10
-b = [str(root_width), 'x', str(root_height)]
-a = ''.join(b)
 root = tk.Tk()
 root.title('RSA Verschlüsselung')
-root.geometry(a)
+root.geometry(''.join([str(root_width), 'x', str(root_height)]))
 
 letters_sepperately = True
 
@@ -31,67 +29,67 @@ def not_yet_programmed():
                          'Ist noch nicht programmiert!')
 
 
-firstMenu = Menu(menu)
-menu.add_cascade(label='Verschlüsselungen', menu=firstMenu)
-firstMenu.add_command(label='Cäsar-Verschlüsselung',
-                      command=not_yet_programmed)
-firstMenu.add_command(label='Cäsar mit Schlüsselwort Verschlüsselung',
-                      command=not_yet_programmed)
-firstMenu.add_command(label='Polyalphabetische-Verschlüsselung',
-                      command=not_yet_programmed)
-firstMenu.add_command(label='Vignière-Verschlüsselung',
-                      command=not_yet_programmed)
-firstMenu.add_separator()
-firstMenu.add_command(label='Skytale', command=not_yet_programmed)
+# firstMenu = Menu(menu)
+# menu.add_cascade(label='Verschlüsselungen', menu=firstMenu)
+# firstMenu.add_command(label='Cäsar-Verschlüsselung',
+#                       command=not_yet_programmed)
+# firstMenu.add_command(label='Cäsar mit Schlüsselwort Verschlüsselung',
+#                       command=not_yet_programmed)
+# firstMenu.add_command(label='Polyalphabetische-Verschlüsselung',
+#                       command=not_yet_programmed)
+# firstMenu.add_command(label='Vignière-Verschlüsselung',
+#                       command=not_yet_programmed)
+# firstMenu.add_separator()
+# firstMenu.add_command(label='Skytale', command=not_yet_programmed)
 
 zentrierDivisor = 100000
 
 
-def check_prime(zahl, random_prime, anzahl=1):
+def check_prime(number, is_random_prime, count=1):
     n = None
-    if random_prime == True:
-        if zahl <= 1:
-            n = input_prime(random_prime)
+    if is_random_prime == True:
+        if number <= 1:
+            n = input_prime(is_random_prime)
         else:
-            for i in range(2, int(sqrt(zahl))+1):
-                if zahl*1.0 % i == 0:
-                    n = input_prime(random_prime)
+            for i in range(2, int(sqrt(number))+1):
+                if number*1.0 % i == 0:
+                    n = input_prime(is_random_prime)
                     break
     else:
-        if zahl <= 1:
+        if number <= 1:
             message = ["Die von dir eingegebene Zahl ", str(
-                zahl), " ist keine Primzahl.\nBitte eine ander eingeben."]
+                number), " ist keine Primzahl.\nBitte eine ander eingeben."]
             message = "".join(message)
             messagebox.showerror("Verschluesselungserror", message)
-            n = input_prime(random_prime, anzahl)
+            n = input_prime(is_random_prime, count)
         else:
-            for i in range(2, int(sqrt(zahl))+1):
-                if zahl*1.0 % i == 0:
+            for i in range(2, int(sqrt(number))+1):
+                if number*1.0 % i == 0:
                     message = ["Die von dir eingegebene Zahl ", str(
-                        zahl), " ist keine Primzahl.\nBitte eine ander eingeben."]
+                        number), " ist keine Primzahl.\nBitte eine ander eingeben."]
                     message = "".join(message)
                     messagebox.showerror("Verschluesselungserror", message)
-                    n = input_prime(random_prime, anzahl)
+                    n = input_prime(is_random_prime, count)
                     break
     if n != None:
         return n
     else:
-        return zahl
+        return number
 
 
-def input_prime(random_prime, anzahl=1):
-    if random_prime == True:
+def input_prime(is_random_prime, count=1):
+    if is_random_prime == True:
         n = random.randint(h, g)
-        n = check_prime(n, random_prime)
+        n = check_prime(n, is_random_prime)
     else:
-        if anzahl == 1:
+        if count == 1:
             n = Dialogs.input_Int(root, "Primzahl eintippen",
                                   "Was ist deine erste Primzahl? (p)", "11")
-            n = check_prime(n, random_prime, anzahl)
-        elif anzahl == 2:
+            n = check_prime(n, is_random_prime, count)
+        elif count == 2:
             n = Dialogs.input_Int(root, "Primzahl eintippen",
                                   "Was ist deine zweite Primzahl? (q)", "5")
-            n = check_prime(n, random_prime, anzahl)
+            n = check_prime(n, is_random_prime, count)
     return n
 
 
