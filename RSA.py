@@ -213,17 +213,23 @@ def encrypt():
             encrypted_char = n
             # for m in factored_e:
             #     encrypted_char = encrypted_char**m % N
-            n_bin = bin(n)[-1:1:-1]
+            # n_bin = bin(n)[3:]
+            # print(f"{n_bin}, {n_bin[::-1]}")
+            e_bin = format(e, "b")
+            print(e_bin)
             # for m in n_bin:
             #     if m==0:
             #         del n_bin[m]
-            for m in n_bin:
-                if int(m) == 0:
-                    encrypted_char = encrypted_char**2 % N
-                else:
-                    encrypted_char = encrypted_char*n % N
-            print(bin(n))
-            print(bin(n)[-1:1:-1])
+            #     else:
+            #         break
+            for m in range(e-1):  # e_bin[::-1]:
+                # print(m, end="")
+                # if int(m) == 0:
+                #     encrypted_char = encrypted_char**2 % N
+                # else:
+                encrypted_char = encrypted_char*n % N
+            # print(bin(n))
+            # print(bin(n)[::-1])
 
             C.append(encrypted_char)
     Dialogs.input_Str(root, "Encryption",
@@ -243,9 +249,17 @@ def decrypt():
     print(f"C = {C_list}")
     message = []
     for n in C_list:
+        # decrypted_char = int(n)
+        # for m in factored_d:
+        #     decrypted_char = decrypted_char**m % N
         decrypted_char = int(n)
-        for m in factored_d:
-            decrypted_char = decrypted_char**m % N
+        d_bin = format(d, "b")
+        for m in range(d-1):  # d_bin[::-1]:
+            # if int(m) == 0:
+            #     decrypted_char = decrypted_char**2 % N
+            # else:
+            decrypted_char = decrypted_char*int(n) % N
+
         message.append(chr(decrypted_char))
         print(f"decrypt({n}) = {decrypted_char} = {message[-1]}")
     end_message = ""
