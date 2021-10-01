@@ -222,12 +222,11 @@ def encrypt():
             #         del n_bin[m]
             #     else:
             #         break
-            for m in range(e-1):  # e_bin[::-1]:
+            for m in e_bin[1:]:
                 # print(m, end="")
-                # if int(m) == 0:
-                #     encrypted_char = encrypted_char**2 % N
-                # else:
-                encrypted_char = encrypted_char*n % N
+                encrypted_char = encrypted_char**2 % N
+                if int(m) == 1:
+                    encrypted_char = encrypted_char*n % N
             # print(bin(n))
             # print(bin(n)[::-1])
 
@@ -254,11 +253,10 @@ def decrypt():
         #     decrypted_char = decrypted_char**m % N
         decrypted_char = int(n)
         d_bin = format(d, "b")
-        for m in range(d-1):  # d_bin[::-1]:
-            # if int(m) == 0:
-            #     decrypted_char = decrypted_char**2 % N
-            # else:
-            decrypted_char = decrypted_char*int(n) % N
+        for m in  d_bin[1:]:
+            decrypted_char = decrypted_char**2 % N
+            if int(m) == 1:
+                decrypted_char = decrypted_char*int(n) % N
 
         message.append(chr(decrypted_char))
         print(f"decrypt({n}) = {decrypted_char} = {message[-1]}")
