@@ -211,8 +211,20 @@ def encrypt():
         C = []
         for n in message:
             encrypted_char = n
-            for m in factored_e:
-                encrypted_char = encrypted_char**m % N
+            # for m in factored_e:
+            #     encrypted_char = encrypted_char**m % N
+            n_bin = bin(n)[-1:1:-1]
+            # for m in n_bin:
+            #     if m==0:
+            #         del n_bin[m]
+            for m in n_bin:
+                if int(m) == 0:
+                    encrypted_char = encrypted_char**2 % N
+                else:
+                    encrypted_char = encrypted_char*n % N
+            print(bin(n))
+            print(bin(n)[-1:1:-1])
+
             C.append(encrypted_char)
     Dialogs.input_Str(root, "Encryption",
                       "Your encrypted message:", C)
