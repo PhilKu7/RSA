@@ -1,4 +1,4 @@
-from math import fmod, sqrt, gcd
+from math import sqrt, gcd
 import math
 import random
 import Dialogs
@@ -102,7 +102,7 @@ def check_error(e, phi_n, d):
         return f"Error 1: e does not satisfy the following:\ngcd(e, 𝜑(n)) = 1, where 𝜑(n) = {phi_n}"
     if not (0 <= d <= N-1):
         return f"Error 1: d does not satisfy the following:\n0 <= d <= N-1, where N = {N}"
-    if not ((e*d) % phi_n == 1):
+    if not (e*d % phi_n == 1):
         return f"Error 1: e does not satisfy the following:\ne ∙ d ≡ mod(𝜑(n)), where 𝜑(n) = {phi_n} and d = {d}"
     return False
 
@@ -119,6 +119,16 @@ def prime_factors(n):
     if n > 2:
         return_list.append(n)
     return return_list
+
+
+def extended_gcd(a, b):
+    u, v, s, t = 1, 0, 0, 1
+    while b != 0:
+        q = a//b
+        a, b, = b, a-q*b
+        u, s = s, u-q*s
+        v, t = t, v-q*t
+    return a, u, v
 
 
 def define_key_auto():
@@ -143,16 +153,38 @@ def define_key_auto():
     phi_n = (p-1)*(q-1)
     print(f"phi_n = {phi_n}")
     e = 1
+    # e = random.randint(1, phi_n/2)
     while e < phi_n:
         e += 1
         if (gcd(e, phi_n) != 1):
             continue
-        d = 1
-        while not (e*d % phi_n == 1) and d < N:
-            d += 1
+        g, u, v = extended_gcd(e, phi_n)
+        d = u % phi_n
+        # a = phi_n
+        # b = e
+        # s = 1
+        # t = 0
+        # u = 0
+        # v = 1
+        # while (b != 0):
+        #     q = a/b
+        #     b1 = b
+        #     b = a-q*b
+        #     a = b1
+        #     u1 = u
+        #     u = s-q*u
+        #     s = u1
+        #     v1 = v
+        #     v = t-q*v
+        #     t = v1
+        # d = a
+        # while not (e*d % phi_n == 1) and d < N:
+        #     d += 1
         error = check_error(e, phi_n, d)
         if not error:
             break
+        else:
+            print(f"error occured {error}")
     factored_d = prime_factors(d)
     factored_e = prime_factors(e)
     string_e_N = tk.Label(root, text=f"e = {e}\nN = {N}")
