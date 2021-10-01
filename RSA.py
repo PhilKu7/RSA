@@ -141,12 +141,14 @@ def define_key_auto():
     print(f"p = {p}, q = {q}")
     N = p*q
     phi_n = (p-1)*(q-1)
+    print(f"phi_n = {phi_n}")
     e = 1
-    while e < N:
-        # e = random.randint(2, phi_n-1)
+    while e < phi_n:
         e += 1
+        if (gcd(e, phi_n) != 1):
+            continue
         d = 1
-        while not ((e*d) % phi_n == 1) and d < N:
+        while not (e*d % phi_n == 1) and d < N:
             d += 1
         error = check_error(e, phi_n, d)
         if not error:
@@ -211,25 +213,12 @@ def encrypt():
         C = []
         for n in message:
             encrypted_char = n
-            # for m in factored_e:
-            #     encrypted_char = encrypted_char**m % N
-            # n_bin = bin(n)[3:]
-            # print(f"{n_bin}, {n_bin[::-1]}")
             e_bin = format(e, "b")
             print(e_bin)
-            # for m in n_bin:
-            #     if m==0:
-            #         del n_bin[m]
-            #     else:
-            #         break
             for m in e_bin[1:]:
-                # print(m, end="")
                 encrypted_char = encrypted_char**2 % N
                 if int(m) == 1:
                     encrypted_char = encrypted_char*n % N
-            # print(bin(n))
-            # print(bin(n)[::-1])
-
             C.append(encrypted_char)
     Dialogs.input_Str(root, "Encryption",
                       "Your encrypted message:", C)
@@ -248,12 +237,9 @@ def decrypt():
     print(f"C = {C_list}")
     message = []
     for n in C_list:
-        # decrypted_char = int(n)
-        # for m in factored_d:
-        #     decrypted_char = decrypted_char**m % N
         decrypted_char = int(n)
         d_bin = format(d, "b")
-        for m in  d_bin[1:]:
+        for m in d_bin[1:]:
             decrypted_char = decrypted_char**2 % N
             if int(m) == 1:
                 decrypted_char = decrypted_char*int(n) % N
