@@ -25,25 +25,9 @@ menu = tk.Menu(root)
 root.config(menu=menu)
 
 
-def not_yet_programmed():
-    messagebox.showerror("Verschlüsselungs editor",
-                         "Ist noch nicht programmiert!")
-
-
-# firstMenu = Menu(menu)
-# menu.add_cascade(label="Verschlüsselungen", menu=firstMenu)
-# firstMenu.add_command(label="Cäsar-Verschlüsselung",
-#                       command=not_yet_programmed)
-# firstMenu.add_command(label="Cäsar mit Schlüsselwort Verschlüsselung",
-#                       command=not_yet_programmed)
-# firstMenu.add_command(label="Polyalphabetische-Verschlüsselung",
-#                       command=not_yet_programmed)
-# firstMenu.add_command(label="Vignière-Verschlüsselung",
-#                       command=not_yet_programmed)
-# firstMenu.add_separator()
-# firstMenu.add_command(label="Skytale", command=not_yet_programmed)
-
-zentrierDivisor = 100000
+def raise_error(error):
+    messagebox.showerror(
+        error_titles, f"The following error occured:\n{error} \n\nplease try again")
 
 
 def check_prime(number, is_random_prime, count=1):
@@ -59,15 +43,13 @@ def check_prime(number, is_random_prime, count=1):
     else:
         if number <= 1:
             error = f"Error 1: The number you entered ({number}) was not a prime."
-            messagebox.showerror(
-                "RSA", f"The following error occured:\n{error} \n\nplease try again")
+            raise_error(error)
             n = input_prime(is_random_prime, count)
         else:
             for i in range(2, int(sqrt(number))+1):
                 if number*1.0 % i == 0:
                     error = f"Error 1: The number you entered ({number}) was not a prime."
-                    messagebox.showerror(
-                        "RSA", f"The following error occured:\n{error} \n\nplease try again")
+                    raise_error(error)
                     n = input_prime(is_random_prime, count)
                     break
     if n != None:
@@ -88,11 +70,6 @@ def input_prime(is_random_prime, count=1):
             n = check_prime(Dialogs.input_Int(root, "Enter prime",
                                               "What is your second prime number? (q)", "17"), False, count)
     return n
-
-
-def waiting():
-    messagebox.showerror("Verschlüsselungs editor",
-                         "Immer noch am berechnen!")
 
 
 def check_error(e, phi_n, d, N):
@@ -139,17 +116,23 @@ def define_key_auto():
     global h
     global g
     h = Dialogs.input_Int(
-        root, "RSA", "What is your lower bound for your random numbers?", "10")
+        root, "Enter lower bound", "What is your lower bound for your random numbers?", "10")
     g = Dialogs.input_Int(
-        root, "RSA", "What is your upper bound for your random numbers?", "100")
+        root, "Enter upper bound", "What is your upper bound for your random numbers?", "100")
+    while h >= g:
+        raise_error(
+            f"Error 1: your first number ({h}) is bigger than your second number ({g})")
+        h = Dialogs.input_Int(
+            root, "RSA", "What is your lower bound for your random numbers?", "10")
+        g = Dialogs.input_Int(
+            root, "RSA", "What is your upper bound for your random numbers?", "100")
     p = input_prime(True)
     q = input_prime(True)
     while p == q:
         p = input_prime(True)
-    print(f"p = {p}, q = {q}")
     local_N = p*q
     local_phi_n = (p-1)*(q-1)
-    print(f"local_phi_n = {local_phi_n}")
+    print(f"p = {p}, q = {q}, 𝜑(n) = {local_phi_n}")
     local_e = random.randint(1, local_phi_n/2)
     while local_e < local_phi_n:
         local_e += 1
@@ -178,26 +161,25 @@ def define_key():
     q = input_prime(False, 2)
     while p == q:
         error = "Error 1: q does not satisfy the following:\np ≠ q"
-        messagebox.showerror(
-            "RSA", f"The following error occured:\n{error} \n\nplease try again")
+        raise_error(error)
         q = input_prime(False, 2)
     local_N = p*q
     local_phi_n = (p-1)*(q-1)
+    print(f"p = {p}, q = {q}, 𝜑(n) = {local_phi_n}")
     local_e = random.randint(1, local_phi_n/2)
     while local_e < local_phi_n:
         local_e += 1
         if (gcd(local_e, local_phi_n) != 1):
             continue
         local_e = Dialogs.input_Int(root, "Encipher number",
-                              "What is your encipher number? (e)", local_e)
+                                    "What is your encipher number? (e)", local_e)
         g, u, v = extended_gcd(local_e, local_phi_n)
         local_d = u % local_phi_n
         error = check_error(local_e, local_phi_n, local_d, local_N)
         if not error:
             break
         else:
-            messagebox.showerror(
-                "RSA", f"The following error occured:\n{error} \n\nplease try again")
+            raise_error(error)
     N, phi_n, d, e = local_N, local_phi_n, local_d, local_e
     print(f"e = {e}, d = {d}, N = {N}")
     string_e_N = tk.Label(root, text=f"e = {e}\nN = {N}")
