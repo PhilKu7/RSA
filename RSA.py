@@ -95,7 +95,7 @@ def waiting():
                          "Immer noch am berechnen!")
 
 
-def check_error(e, phi_n, d):
+def check_error(e, phi_n, d, N):
     if not (0 <= e <= N-1):
         return f"Error 1: e does not satisfy the following:\n0 <= e <= N-1, where N = {N}"
     if not (math.gcd(e, phi_n) == 1):
@@ -132,14 +132,12 @@ def extended_gcd(a, b):
 
 
 def define_key_auto():
-    global e
     global N
     global phi_n
+    global d
+    global e
     global h
     global g
-    global d
-    global factored_d
-    global factored_e
     h = Dialogs.input_Int(
         root, "RSA", "What is your lower bound for your random numbers?", "10")
     g = Dialogs.input_Int(
@@ -149,21 +147,20 @@ def define_key_auto():
     while p == q:
         p = input_prime(True)
     print(f"p = {p}, q = {q}")
-    N = p*q
-    phi_n = (p-1)*(q-1)
-    print(f"phi_n = {phi_n}")
-    e = random.randint(1, phi_n/2)
-    while e < phi_n:
-        e += 1
-        if (gcd(e, phi_n) != 1):
+    local_N = p*q
+    local_phi_n = (p-1)*(q-1)
+    print(f"local_phi_n = {local_phi_n}")
+    local_e = random.randint(1, local_phi_n/2)
+    while local_e < local_phi_n:
+        local_e += 1
+        if (gcd(local_e, local_phi_n) != 1):
             continue
-        g, u, v = extended_gcd(e, phi_n)
-        d = u % phi_n
-        error = check_error(e, phi_n, d)
+        g, u, v = extended_gcd(local_e, local_phi_n)
+        local_d = u % local_phi_n
+        error = check_error(local_e, local_phi_n, local_d, local_N)
         if not error:
             break
-    factored_d = prime_factors(d)
-    factored_e = prime_factors(e)
+    N, phi_n, d, e = local_N, local_phi_n, local_d, local_e
     print(f"e = {e}, d = {d}, N = {N}")
     string_e_N = tk.Label(root, text=f"e = {e}\nN = {N}")
     string_e_N.place(x=250, y=60, width=150, height=80)
@@ -173,13 +170,10 @@ def define_key_auto():
 
 
 def define_key():
-    global e
     global N
     global phi_n
     global d
-    global factored_d
-    global factored_e
-    d = 0
+    global e
     p = input_prime(False, 1)
     q = input_prime(False, 2)
     while p == q:
@@ -187,25 +181,24 @@ def define_key():
         messagebox.showerror(
             "RSA", f"The following error occured:\n{error} \n\nplease try again")
         q = input_prime(False, 2)
-    N = p*q
-    phi_n = (p-1)*(q-1)
-    e = random.randint(1, phi_n/2)
-    while e < phi_n:
-        e += 1
-        if (gcd(e, phi_n) != 1):
+    local_N = p*q
+    local_phi_n = (p-1)*(q-1)
+    local_e = random.randint(1, local_phi_n/2)
+    while local_e < local_phi_n:
+        local_e += 1
+        if (gcd(local_e, local_phi_n) != 1):
             continue
-        e = Dialogs.input_Int(root, "Encipher number",
-                              "What is your encipher number? (e)", e)
-        g, u, v = extended_gcd(e, phi_n)
-        d = u % phi_n
-        error = check_error(e, phi_n, d)
+        local_e = Dialogs.input_Int(root, "Encipher number",
+                              "What is your encipher number? (e)", local_e)
+        g, u, v = extended_gcd(local_e, local_phi_n)
+        local_d = u % local_phi_n
+        error = check_error(local_e, local_phi_n, local_d, local_N)
         if not error:
             break
         else:
             messagebox.showerror(
                 "RSA", f"The following error occured:\n{error} \n\nplease try again")
-    factored_d = prime_factors(d)
-    factored_e = prime_factors(e)
+    N, phi_n, d, e = local_N, local_phi_n, local_d, local_e
     print(f"e = {e}, d = {d}, N = {N}")
     string_e_N = tk.Label(root, text=f"e = {e}\nN = {N}")
     string_e_N.place(x=250, y=60, width=150, height=80)
