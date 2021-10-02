@@ -152,41 +152,19 @@ def define_key_auto():
     N = p*q
     phi_n = (p-1)*(q-1)
     print(f"phi_n = {phi_n}")
-    e = 1
-    # e = random.randint(1, phi_n/2)
+    e = random.randint(1, phi_n/2)
     while e < phi_n:
         e += 1
         if (gcd(e, phi_n) != 1):
             continue
         g, u, v = extended_gcd(e, phi_n)
         d = u % phi_n
-        # a = phi_n
-        # b = e
-        # s = 1
-        # t = 0
-        # u = 0
-        # v = 1
-        # while (b != 0):
-        #     q = a/b
-        #     b1 = b
-        #     b = a-q*b
-        #     a = b1
-        #     u1 = u
-        #     u = s-q*u
-        #     s = u1
-        #     v1 = v
-        #     v = t-q*v
-        #     t = v1
-        # d = a
-        # while not (e*d % phi_n == 1) and d < N:
-        #     d += 1
         error = check_error(e, phi_n, d)
         if not error:
             break
-        else:
-            print(f"error occured {error}")
     factored_d = prime_factors(d)
     factored_e = prime_factors(e)
+    print(f"e = {e}, d = {d}, N = {N}")
     string_e_N = tk.Label(root, text=f"e = {e}\nN = {N}")
     string_e_N.place(x=250, y=60, width=150, height=80)
 
@@ -211,22 +189,24 @@ def define_key():
         q = input_prime(False, 2)
     N = p*q
     phi_n = (p-1)*(q-1)
-    while True:
+    e = random.randint(1, phi_n/2)
+    while e < phi_n:
+        e += 1
+        if (gcd(e, phi_n) != 1):
+            continue
         e = Dialogs.input_Int(root, "Encipher number",
-                              "What is your encipher number? (e)", "7")
-        if 0 <= e <= N-1:
-            d = 1
-            while not (e*d) % phi_n == 1:
-                d += 1
+                              "What is your encipher number? (e)", e)
+        g, u, v = extended_gcd(e, phi_n)
+        d = u % phi_n
         error = check_error(e, phi_n, d)
-        if error:
+        if not error:
+            break
+        else:
             messagebox.showerror(
                 "RSA", f"The following error occured:\n{error} \n\nplease try again")
-        else:
-            break
-
     factored_d = prime_factors(d)
     factored_e = prime_factors(e)
+    print(f"e = {e}, d = {d}, N = {N}")
     string_e_N = tk.Label(root, text=f"e = {e}\nN = {N}")
     string_e_N.place(x=250, y=60, width=150, height=80)
 
