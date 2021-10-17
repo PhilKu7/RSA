@@ -192,6 +192,10 @@ def define_key():
 def encrypt():
     message_string = Dialogs.input_Str(
         root, "Encryption", "What do you want to encrypt?", "Hello World!")
+    while message_string == "":
+        raise_error("Error 1: your message to encrypt is empty")
+        message_string = Dialogs.input_Str(root, "Encryption",
+                                           "What do you want to encrypt?", "Hello World!")
     message = []
     for n in message_string:
         message.append(ord(n))
@@ -214,6 +218,10 @@ def encrypt():
 def decrypt():
     C = Dialogs.input_Str(root, "Encryption",
                           "What do you want to decrypt?", "")
+    while C == "":
+        raise_error("Error 1: your message to decrypt is empty")
+        C = Dialogs.input_Str(root, "Encryption",
+                              "What do you want to decrypt?", "")
     C_list = []
     first = 0
     for n in range(len(C)):
@@ -230,7 +238,6 @@ def decrypt():
             decrypted_char = decrypted_char**2 % N
             if int(m) == 1:
                 decrypted_char = decrypted_char*int(n) % N
-
         message.append(chr(decrypted_char))
         print(f"decrypt({n}) = {decrypted_char} = {message[-1]}")
     end_message = ""
