@@ -12,7 +12,7 @@ root_width = 750
 root_height = 500
 root_borderwidth = 10
 root = tk.Tk()
-root.title("RSA Verschlüsselung")
+root.title("RSA Encryption")
 root.geometry("".join([str(root_width), "x", str(root_height)]))
 
 letters_sepperately = True
