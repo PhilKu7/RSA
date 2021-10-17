@@ -1,6 +1,7 @@
 from math import sqrt, gcd
 import math
 import random
+from tkinter import font
 import Dialogs
 import tkinter as tk
 from tkinter import simpledialog, messagebox, Menu
@@ -246,6 +247,7 @@ def decrypt():
     Dialogs.input_Str(root, "Encryption",
                       "Your decrypted message:", end_message)
 
+tk.Label(root, text="RSA Encryption", font=font.BOLD).grid(column=0, row=0, columnspan=3)
 
 button_define_key = tk.Button(root, text=label_define_key[4], command=define_key,
                               background="#FFFF00", activebackground="#FFF000",  cursor="pencil", borderwidth=5)
@@ -262,6 +264,22 @@ button_encrypt.grid(column=0, row=3, sticky=tk.N+tk.E+tk.S+tk.W)
 button_decrypt = tk.Button(root, text=label_decrypt_text[4], command=decrypt,
                            background="#40E0D0", activebackground="#48D1CC", cursor="exchange", borderwidth=5)
 button_decrypt.grid(column=1, row=3, sticky=tk.N+tk.E+tk.S+tk.W)
+
+input_number_of_chars = tk.IntVar()
+input_number_of_chars.set(1)
+input_number_of_chars_1 = tk.Radiobutton(root, text="only 1 letter", variable=input_number_of_chars, value=1)
+input_number_of_chars_1.grid(column=0, row=4, sticky=tk.W)
+
+input_number_of_chars_2 = tk.Radiobutton(root, text="every 2 letters", variable=input_number_of_chars, value=2)
+input_number_of_chars_2.grid(column=0, row=5, sticky=tk.W)
+
+input_encoding_method = tk.StringVar()
+input_encoding_method.set("UNICODE")
+input_encoding_method_ASCII = tk.Radiobutton(root, text="ASCII", variable=input_encoding_method, value="ASCII")
+input_encoding_method_ASCII.grid(column=1, row=4, sticky=tk.W)
+
+input_encoding_method_UNICODE = tk.Radiobutton(root, text="UNICODE", variable=input_encoding_method, value="UNICODE")
+input_encoding_method_UNICODE.grid(column=1, row=5, sticky=tk.W)
 
 
 if __name__ == "__main__":
