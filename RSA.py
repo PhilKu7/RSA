@@ -146,10 +146,10 @@ def define_key_auto():
     N, phi_n, d, e = local_N, local_phi_n, local_d, local_e
     print(f"e = {e}, d = {d}, N = {N}")
     string_e_N = tk.Label(root, text=f"e = {e}\nN = {N}")
-    string_e_N.place(x=250, y=60, width=150, height=80)
+    string_e_N.grid(column=0, row=2)
 
     string_d = tk.Label(root, text=f"d = {d}")
-    string_d.place(x=150, y=250, width=150, height=50)
+    string_d.grid(column=1, row=2)
 
 
 def define_key():
@@ -183,10 +183,10 @@ def define_key():
     N, phi_n, d, e = local_N, local_phi_n, local_d, local_e
     print(f"e = {e}, d = {d}, N = {N}")
     string_e_N = tk.Label(root, text=f"e = {e}\nN = {N}")
-    string_e_N.place(x=250, y=60, width=150, height=80)
+    string_e_N.grid(column=0, row=2)
 
     string_d = tk.Label(root, text=f"d = {d}")
-    string_d.place(x=150, y=250, width=150, height=50)
+    string_d.grid(column=1, row=2)
 
 
 def encrypt():
@@ -248,28 +248,20 @@ def decrypt():
 
 
 button_define_key = tk.Button(root, text=label_define_key[4], command=define_key,
-                              background="#FFFF00", activebackground="#FFF000",  cursor="exchange", borderwidth=5)
-button_define_key.place(x=root_x_start+root_borderwidth,
-                        y=root_height-root_borderwidth -
-                        label_define_key[2],
-                        width=label_define_key[3], height=label_define_key[2])
+                              background="#FFFF00", activebackground="#FFF000",  cursor="pencil", borderwidth=5)
+button_define_key.grid(column=0, row=1, sticky=tk.N+tk.E+tk.S+tk.W)
 
 button_define_key_auto = tk.Button(root, text=label_define_key_auto[4], command=define_key_auto,
-                                   background="#FFFF00", activebackground="#FFF000", cursor="exchange", borderwidth=5)
-button_define_key_auto.place(x=root_width-root_borderwidth-label_define_key_auto[3],
-                             y=root_height-root_borderwidth -
-                             label_define_key_auto[2],
-                             width=label_define_key_auto[3], height=label_define_key_auto[2])
+                                   background="#FFFF00", activebackground="#FFF000", cursor="pencil", borderwidth=5)
+button_define_key_auto.grid(column=1, row=1, sticky=tk.N+tk.E+tk.S+tk.W)
 
 button_encrypt = tk.Button(root, text=label_encrypt_text[4], command=encrypt,
                            background="#7CFC00", activebackground="#80FF07",  cursor="exchange", borderwidth=5)
-button_encrypt.place(
-    x=root_width/2-label_encrypt_text[3]/2, y=label_encrypt_text[1], width=label_encrypt_text[3], height=label_encrypt_text[2])
+button_encrypt.grid(column=0, row=3, sticky=tk.N+tk.E+tk.S+tk.W)
 
 button_decrypt = tk.Button(root, text=label_decrypt_text[4], command=decrypt,
                            background="#40E0D0", activebackground="#48D1CC", cursor="exchange", borderwidth=5)
-button_decrypt.place(
-    x=root_width/2-label_decrypt_text[3]/2, y=label_decrypt_text[1], width=label_decrypt_text[3], height=label_decrypt_text[2])
+button_decrypt.grid(column=1, row=3, sticky=tk.N+tk.E+tk.S+tk.W)
 
 
 if __name__ == "__main__":
