@@ -29,7 +29,7 @@ root.config(menu=menu)
 
 def raise_error(error):
     messagebox.showerror(
-        "RSA ERROR‼", f"The following error occured:\n{error} \n\nPlease try again😋")
+        "RSA ERROR‼", f"The following error occured:\n{error}\n\nPlease try again😋")
 
 
 def check_prime(number, is_random_prime, count=1):
@@ -281,7 +281,7 @@ def decrypt():
                 message.append(chr(
                     int(decrypted_char[m*segments:(m+1)*segments])))
                 print(
-                    f"decrypt({n}) = {decrypted_char}; schar({decrypted_char[m*segments:(m+1)*segments]}) = {message[-1]}")
+                    f"decrypt({n}) = {decrypted_char}; char({decrypted_char[m*segments:(m+1)*segments]}) = {message[-1]}")
         else:
             message.append(chr(decrypted_char))
             print(f"decrypt({n}) = {decrypted_char} = {message[-1]}")

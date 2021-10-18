@@ -1,0 +1,2 @@
+multiple inverse: https://www.inf.hs-flensburg.de/lang/krypto/grund/inverses-element.htm
+https://www.inf.hs-flensburg.de/lang/krypto/grund/fermat-euler.htm
