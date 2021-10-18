@@ -5,7 +5,6 @@ from tkinter import font
 import Dialogs
 import tkinter as tk
 from tkinter import simpledialog, messagebox, Menu
-from styles import *
 
 root_x_start = 0
 root_y_start = 0
@@ -30,7 +29,7 @@ root.config(menu=menu)
 
 def raise_error(error):
     messagebox.showerror(
-        error_titles, f"The following error occured:\n{error} \n\nplease try again")
+        "RSA ERROR‼", f"The following error occured:\n{error} \n\nPlease try again😋")
 
 
 def check_prime(number, is_random_prime, count=1):
@@ -254,10 +253,9 @@ def encrypt():
 def decrypt():
     C = Dialogs.input_Str(root, "Encryption",
                           "What do you want to decrypt?", "")
-    while C == "":
+    if C == "":
         raise_error("Error 1: your message to decrypt is empty")
-        C = Dialogs.input_Str(root, "Encryption",
-                              "What do you want to decrypt?", "")
+        return
     C_list = []
     first = 0
     for n in range(len(C)):
