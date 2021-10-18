@@ -212,18 +212,39 @@ def encrypt():
                 raise_error(
                     f"Error 1: This text \"{message_string}\" contains non-ASCII symbols such as \"{n}\"!")
                 return
+            elif ord(n) > N:
+                raise_error(
+                    f"Error 1: This text \"{message_string}\" contains {input_encoding_method.get()}-symbols bigger than N ({N}) such as \"{n}\" ({ord(n)})!\nThis symbol will be encrypted wrongly!")
             message.append(ord(n))
+    if input_encoding_method.get() == "ASCII":
+        print(f"Message = {message}")
+        old_message = message
+        message = []
+        for n in old_message:
+            message.append(f"{n:03d}")
+        print(f"Message = {message}")
+        old_message = message
+        if len(old_message) % input_number_of_chars.get() != 0:
+            for n in range(len(old_message) % input_number_of_chars.get()):
+                old_message.append("000")
+        message = []
+        part_message = ""
+        for n in range(0, len(old_message), input_number_of_chars.get()):
+            for m in range(input_number_of_chars.get()):
+                part_message += old_message[n+m]
+            message.append(part_message)
+            part_message = ""
     print(f"Message = {message}")
     if letters_sepperately == True:
         C = []
         for n in message:
-            encrypted_char = n
+            encrypted_char = int(n)
             e_bin = format(e, "b")
             print(e_bin)
             for m in e_bin[1:]:
                 encrypted_char = encrypted_char**2 % N
                 if int(m) == 1:
-                    encrypted_char = encrypted_char*n % N
+                    encrypted_char = encrypted_char*int(n) % N
             C.append(encrypted_char)
     Dialogs.input_Str(root, "Encryption",
                       "Your encrypted message:", C)
@@ -252,13 +273,25 @@ def decrypt():
             decrypted_char = decrypted_char**2 % N
             if int(m) == 1:
                 decrypted_char = decrypted_char*int(n) % N
-        message.append(chr(decrypted_char))
-        print(f"decrypt({n}) = {decrypted_char} = {message[-1]}")
+        if input_encoding_method.get() == "ASCII":
+            decrypted_char = str(decrypted_char)
+            while len(decrypted_char) % input_number_of_chars.get() != 0:
+                decrypted_char = "0"+decrypted_char
+            segments = int(len(decrypted_char)/input_number_of_chars.get())
+            for m in range(input_number_of_chars.get()):
+                message.append(chr(
+                    int(decrypted_char[m*segments:(m+1)*segments])))
+                print(f"decrypt({n}) = {decrypted_char} = {message[-1]}")
+                print(f"segment = {decrypted_char[m*segments:(m+1)*segments]}")
+        else:
+            message.append(chr(decrypted_char))
+            print(f"decrypt({n}) = {decrypted_char} = {message[-1]}")
     end_message = ""
     for n in range(len(message)):
         end_message = end_message + message[n]
     Dialogs.input_Str(root, "Encryption",
                       "Your decrypted message:", end_message)
+
 
 # ----------- style labels -----------
 label_title_RSA = {"text": "RSA Encryption", "font": font.BOLD}
