@@ -1,10 +1,9 @@
 from math import sqrt, gcd
 import math
 import random
-from tkinter import font
 import Dialogs
 import tkinter as tk
-from tkinter import simpledialog, messagebox, Menu
+from tkinter import font, messagebox
 
 root_x_start = 0
 root_y_start = 0
