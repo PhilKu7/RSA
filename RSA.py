@@ -67,11 +67,11 @@ def input_prime(is_random_prime, count=1):
         n = check_prime(n, is_random_prime)
     else:
         if count == 1:
-            n = check_prime(Dialogs.input_Int(root, "Enter prime",
-                                              "What is your first prime number? (p)", "11"), False, count)
+            n = check_prime(Dialogs.input_Int(
+                root, "Enter prime", "What is your first prime number? (p)", "11"), False, count)
         elif count == 2:
-            n = check_prime(Dialogs.input_Int(root, "Enter prime",
-                                              "What is your second prime number? (q)", "17"), False, count)
+            n = check_prime(Dialogs.input_Int(
+                root, "Enter prime", "What is your second prime number? (q)", "17"), False, count)
     return n
 
 
@@ -118,10 +118,10 @@ def define_key_auto():
     global e
     global h
     global g
-    h = Dialogs.input_Int(
-        root, "Enter lower bound", "What is your lower bound for your random numbers?", "10")
-    g = Dialogs.input_Int(
-        root, "Enter upper bound", "What is your upper bound for your random numbers?", "100")
+    h = Dialogs.input_Int(root, "Enter lower bound",
+                          "What is your lower bound for your random numbers?", "10")
+    g = Dialogs.input_Int(root, "Enter upper bound",
+                          "What is your upper bound for your random numbers?", "100")
     while h >= g:
         raise_error(
             f"Error 1: your first number ({h}) is bigger than your second number ({g})")
@@ -174,8 +174,8 @@ def define_key():
         local_e += 1
         if (gcd(local_e, local_phi_n) != 1):
             continue
-        local_e = Dialogs.input_Int(root, "Encipher number",
-                                    "What is your encipher number? (e)", local_e)
+        local_e = Dialogs.input_Int(
+            root, "Encipher number", "What is your encipher number? (e)", local_e)
         g, u, v = extended_gcd(local_e, local_phi_n)
         local_d = u % local_phi_n
         error = check_error(local_e, local_phi_n, local_d, local_N)
@@ -197,8 +197,8 @@ def encrypt():
         root, "Encryption", "What do you want to encrypt?", "Hello World!")
     while message_string == "":
         raise_error("Error 1: your message to encrypt is empty")
-        message_string = Dialogs.input_Str(root, "Encryption",
-                                           "What do you want to encrypt?", "Hello World!")
+        message_string = Dialogs.input_Str(
+            root, "Encryption", "What do you want to encrypt?", "Hello World!")
     message = []
     if input_encoding_method.get() == "UNICODE":
         for n in message_string:
@@ -216,13 +216,12 @@ def encrypt():
                 raise_error(
                     f"Error 1: This text \"{message_string}\" contains {input_encoding_method.get()}-symbols bigger than N ({N}) such as \"{n}\" ({ord(n)})!\nThis symbol will be encrypted wrongly!")
             message.append(ord(n))
+    print(f"Message = {message}")
     if input_encoding_method.get() == "ASCII":
-        print(f"Message = {message}")
         old_message = message
         message = []
         for n in old_message:
             message.append(f"{n:03d}")
-        print(f"Message = {message}")
         old_message = message
         if len(old_message) % input_number_of_chars.get() != 0:
             for n in range(len(old_message) % input_number_of_chars.get()):
@@ -234,7 +233,6 @@ def encrypt():
                 part_message += old_message[n+m]
             message.append(part_message)
             part_message = ""
-    print(f"Message = {message}")
     if letters_sepperately == True:
         C = []
         for n in message:
@@ -246,8 +244,7 @@ def encrypt():
                 if int(m) == 1:
                     encrypted_char = encrypted_char*int(n) % N
             C.append(encrypted_char)
-    Dialogs.input_Str(root, "Encryption",
-                      "Your encrypted message:", C)
+    Dialogs.input_Str(root, "Encryption", "Your encrypted message:", C)
 
 
 def decrypt():
@@ -281,8 +278,8 @@ def decrypt():
             for m in range(input_number_of_chars.get()):
                 message.append(chr(
                     int(decrypted_char[m*segments:(m+1)*segments])))
-                print(f"decrypt({n}) = {decrypted_char} = {message[-1]}")
-                print(f"segment = {decrypted_char[m*segments:(m+1)*segments]}")
+                print(
+                    f"decrypt({n}) = {decrypted_char}; schar({decrypted_char[m*segments:(m+1)*segments]}) = {message[-1]}")
         else:
             message.append(chr(decrypted_char))
             print(f"decrypt({n}) = {decrypted_char} = {message[-1]}")
@@ -295,10 +292,10 @@ def decrypt():
 
 # ----------- style labels -----------
 label_title_RSA = {"text": "RSA Encryption", "font": font.BOLD}
-label_button_encrypt = {"text": "Encrypt text", "command": encrypt,
-                        "background": "#7CFC00", "activebackground": "#80FF07",  "cursor": "exchange", "borderwidth": 5}
-label_button_decrypt = {"text": "Decrypt text", "command": decrypt,
-                        "background": "#40E0D0", "activebackground": "#48D1CC", "cursor": "exchange", "borderwidth": 5}
+label_button_encrypt = {"text": "Encrypt text", "command": encrypt, "background": "#7CFC00",
+                        "activebackground": "#80FF07",  "cursor": "exchange", "borderwidth": 5}
+label_button_decrypt = {"text": "Decrypt text", "command": decrypt, "background": "#40E0D0",
+                        "activebackground": "#48D1CC", "cursor": "exchange", "borderwidth": 5}
 label_button_define_key = {"text": "Define key manually", "command": define_key,
                            "background": "#FFFF00", "activebackground": "#FFF000",  "cursor": "pencil", "borderwidth": 5}
 label_button_define_key_auto = {"text": "Define key automatic", "command": define_key_auto,
