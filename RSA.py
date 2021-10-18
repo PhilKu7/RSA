@@ -18,6 +18,11 @@ letters_sepperately = True
 label_text_to_number_encrypt = [1]
 timeTriggerGGT = 10000000
 
+input_number_of_chars = tk.IntVar()
+input_number_of_chars.set(1)
+
+input_encoding_method = tk.StringVar()
+input_encoding_method.set("UNICODE")
 
 menu = tk.Menu(root)
 root.config(menu=menu)
@@ -255,44 +260,53 @@ def decrypt():
     Dialogs.input_Str(root, "Encryption",
                       "Your decrypted message:", end_message)
 
+# ----------- style labels -----------
+label_title_RSA = {"text": "RSA Encryption", "font": font.BOLD}
+label_button_encrypt = {"text": "Encrypt text", "command": encrypt,
+                        "background": "#7CFC00", "activebackground": "#80FF07",  "cursor": "exchange", "borderwidth": 5}
+label_button_decrypt = {"text": "Decrypt text", "command": decrypt,
+                        "background": "#40E0D0", "activebackground": "#48D1CC", "cursor": "exchange", "borderwidth": 5}
+label_button_define_key = {"text": "Define key manually", "command": define_key,
+                           "background": "#FFFF00", "activebackground": "#FFF000",  "cursor": "pencil", "borderwidth": 5}
+label_button_define_key_auto = {"text": "Define key automatic", "command": define_key_auto,
+                                "background": "#FFFF00", "activebackground": "#FFF000", "cursor": "pencil", "borderwidth": 5}
+label_input_number_of_chars_1 = {
+    "text": "only 1 letter", "variable": input_number_of_chars, "value": 1}
+label_input_number_of_chars_2 = {
+    "text": "every 2 letters", "variable": input_number_of_chars, "value": 2}
+label_input_encoding_method_ASCII = {
+    "text": "ASCII", "variable": input_encoding_method, "value": "ASCII"}
+label_input_encoding_method_UNICODE = {
+    "text": "UNICODE", "variable": input_encoding_method, "value": "UNICODE"}
 
-tk.Label(root, text="RSA Encryption", font=font.BOLD).grid(
+# ----------- create and place buttons -----------
+tk.Label(root, **label_title_RSA).grid(
     column=0, row=0, columnspan=3)
 
-button_define_key = tk.Button(root, text=label_define_key[4], command=define_key,
-                              background="#FFFF00", activebackground="#FFF000",  cursor="pencil", borderwidth=5)
+button_define_key = tk.Button(root, **label_button_define_key)
 button_define_key.grid(column=0, row=1, sticky=tk.N+tk.E+tk.S+tk.W)
 
-button_define_key_auto = tk.Button(root, text=label_define_key_auto[4], command=define_key_auto,
-                                   background="#FFFF00", activebackground="#FFF000", cursor="pencil", borderwidth=5)
+button_define_key_auto = tk.Button(root, **label_button_define_key_auto)
 button_define_key_auto.grid(column=1, row=1, sticky=tk.N+tk.E+tk.S+tk.W)
 
-button_encrypt = tk.Button(root, text=label_encrypt_text[4], command=encrypt,
-                           background="#7CFC00", activebackground="#80FF07",  cursor="exchange", borderwidth=5)
+button_encrypt = tk.Button(root, **label_button_encrypt)
 button_encrypt.grid(column=0, row=3, sticky=tk.N+tk.E+tk.S+tk.W)
 
-button_decrypt = tk.Button(root, text=label_decrypt_text[4], command=decrypt,
-                           background="#40E0D0", activebackground="#48D1CC", cursor="exchange", borderwidth=5)
+button_decrypt = tk.Button(root, **label_button_decrypt)
 button_decrypt.grid(column=1, row=3, sticky=tk.N+tk.E+tk.S+tk.W)
 
-input_number_of_chars = tk.IntVar()
-input_number_of_chars.set(1)
-input_number_of_chars_1 = tk.Radiobutton(
-    root, text="only 1 letter", variable=input_number_of_chars, value=1)
+input_number_of_chars_1 = tk.Radiobutton(root, **label_input_number_of_chars_1)
 input_number_of_chars_1.grid(column=0, row=4, sticky=tk.W)
 
-input_number_of_chars_2 = tk.Radiobutton(
-    root, text="every 2 letters", variable=input_number_of_chars, value=2)
+input_number_of_chars_2 = tk.Radiobutton(root, **label_input_number_of_chars_2)
 input_number_of_chars_2.grid(column=0, row=5, sticky=tk.W)
 
-input_encoding_method = tk.StringVar()
-input_encoding_method.set("UNICODE")
 input_encoding_method_ASCII = tk.Radiobutton(
-    root, text="ASCII", variable=input_encoding_method, value="ASCII")
+    root, **label_input_encoding_method_ASCII)
 input_encoding_method_ASCII.grid(column=1, row=4, sticky=tk.W)
 
 input_encoding_method_UNICODE = tk.Radiobutton(
-    root, text="UNICODE", variable=input_encoding_method, value="UNICODE")
+    root, **label_input_encoding_method_UNICODE)
 input_encoding_method_UNICODE.grid(column=1, row=5, sticky=tk.W)
 
 
