@@ -224,7 +224,7 @@ def encrypt():
             message.append(f"{n:03d}")
         old_message = message
         if len(old_message) % input_number_of_chars.get() != 0:
-            for n in range(len(old_message) % input_number_of_chars.get()):
+            for n in range(input_number_of_chars.get()-(len(old_message) % input_number_of_chars.get())):
                 old_message.append("000")
         message = []
         part_message = ""
@@ -233,6 +233,10 @@ def encrypt():
                 part_message += old_message[n+m]
             message.append(part_message)
             part_message = ""
+        for n in message:
+            if int(n) > N:
+                raise_error(
+                    f"Error 1: This text \"{message_string}\" contains {input_encoding_method.get()}-symbols bigger than N ({N}) when encrypting {input_number_of_chars.get()} letters at the time!\nE.g. {int(n)} is bigger than N ({N})\nSome symbol will be encrypted wrongly!")
     if letters_sepperately == True:
         C = []
         for n in message:
@@ -309,6 +313,9 @@ label_input_encoding_method_ASCII = {
 label_input_encoding_method_UNICODE = {
     "text": "UNICODE", "variable": input_encoding_method, "value": "UNICODE"}
 
+label_input_number_of_chars = {
+    "text": "only 1 letter", "textvariable": input_number_of_chars,  "from_": 1, "to": 10, "increment": 1}
+
 # ----------- create and place buttons -----------
 tk.Label(root, **label_title_RSA).grid(
     column=0, row=0, columnspan=3)
@@ -330,6 +337,9 @@ input_number_of_chars_1.grid(column=0, row=4, sticky=tk.W)
 
 input_number_of_chars_2 = tk.Radiobutton(root, **label_input_number_of_chars_2)
 input_number_of_chars_2.grid(column=0, row=5, sticky=tk.W)
+
+input_number_of_chars_ = tk.Spinbox(root, **label_input_number_of_chars)
+input_number_of_chars_.grid(column=0, row=6, sticky=tk.W)
 
 input_encoding_method_ASCII = tk.Radiobutton(
     root, **label_input_encoding_method_ASCII)
