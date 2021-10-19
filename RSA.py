@@ -256,31 +256,60 @@ def encrypt():
         raise_error(
             "Error 1: You didn't define the keys yet.\nPlease do this at first!")
         return
-    message_string = Dialogs.input_Str(
-        root, "Encryption", "What do you want to encrypt?", "Hello World!")
-    while message_string == "":
-        raise_error("Error 1: Your message to encrypt is empty!")
+    if input_encoding_method.get() != "None":
         message_string = Dialogs.input_Str(
             root, "Encryption", "What do you want to encrypt?", "Hello World!")
-    message = []
-    if input_encoding_method.get() == "UNICODE":
-        for n in message_string:
-            if ord(n) > N:
-                raise_error(
-                    f"Error 1: This text \"{message_string}\" contains {input_encoding_method.get()}-symbols bigger than N ({N}) such as \"{n}\" ({ord(n)})!\nThis symbol will be encrypted wrongly!")
-            message.append(ord(n))
-    elif input_encoding_method.get() == "ASCII":
-        for n in message_string:
-            if ord(n) > 255:
-                raise_error(
-                    f"Error 1: This text \"{message_string}\" contains non-ASCII symbols such as \"{n}\"!")
-                return
-            elif ord(n) > N:
-                raise_error(
-                    f"Error 1: This text \"{message_string}\" contains {input_encoding_method.get()}-symbols bigger than N ({N}) such as \"{n}\" ({ord(n)})!\nThis symbol will be encrypted wrongly!")
-            message.append(ord(n))
+        while message_string == "":
+            raise_error("Error 1: Your message to encrypt is empty!")
+            message_string = Dialogs.input_Str(
+                root, "Encryption", "What do you want to encrypt?", "Hello World!")
+        message = []
+        if input_encoding_method.get() == "UNICODE":
+            for n in message_string:
+                if ord(n) > N:
+                    raise_error(
+                        f"Error 1: This text \"{message_string}\" contains {input_encoding_method.get()}-symbols bigger than N ({N}) such as \"{n}\" ({ord(n)})!\nThis symbol will be encrypted wrongly!")
+                message.append(ord(n))
+        elif input_encoding_method.get() == "ASCII":
+            for n in message_string:
+                if ord(n) > 255:
+                    raise_error(
+                        f"Error 1: This text \"{message_string}\" contains non-ASCII symbols such as \"{n}\"!")
+                    return
+                elif ord(n) > N:
+                    raise_error(
+                        f"Error 1: This text \"{message_string}\" contains {input_encoding_method.get()}-symbols bigger than N ({N}) such as \"{n}\" ({ord(n)})!\nThis symbol will be encrypted wrongly!")
+                message.append(ord(n))
+    else:
+        error = True
+        while error == True:
+            error = False
+            message_string = Dialogs.input_Str(
+                root, "Encryption", "What do you want to encrypt?\nUse spaces to seperate numbers", "100")
+            while message_string == "":
+                raise_error("Error 1: Your message to encrypt is empty!")
+                message_string = Dialogs.input_Str(
+                    root, "Encryption", "What do you want to encrypt?\nUse spaces to seperate numbers", "100")
+            message = []
+            first = 0
+            for n in range(len(message_string)):
+                if message_string[n] == " ":
+                    message.append(message_string[first:n])
+                    first = n+1
+            message.append(message_string[first:])
+            for n in message:
+                if not n.isdigit():
+                    raise_error(
+                        f"Error 1: Your message to encrypt ({message_string}) contains non numbers or non spaces ({n})!")
+                    error = True
+                    break
+                elif int(n) > N:
+                    raise_error(
+                        f"Error 1: This text \"{message_string}\" contains numbers bigger than N ({N}) such as \"{n}\" ({ord(n)})!\nThese numbers will be encrypted wrongly!")
+        for n in range(len(message)):
+            message[n] = int(message[n])
     print(f"Message = {message}")
-    if input_encoding_method.get() == "ASCII":
+    if input_encoding_method.get() == "ASCII" or input_encoding_method.get() == "None":
         old_message = message
         message = []
         for n in old_message:
@@ -299,7 +328,7 @@ def encrypt():
         for n in message:
             if int(n) > N:
                 raise_error(
-                    f"Error 1: This text \"{message_string}\" contains {input_encoding_method.get()}-symbols bigger than N ({N}) when encrypting {input_number_of_chars.get()} letters at the time!\nE.g. {int(n)} is bigger than N ({N})\nSome symbol will be encrypted wrongly!")
+                    f"Error 1: This text \"{message_string}\" contains Symbols bigger than N ({N}) when encrypting {input_number_of_chars.get()} letters at the time!\nE.g. {int(n)} is bigger than N ({N})\nSome symbol will be encrypted wrongly!")
     if letters_sepperately == True:
         C = []
         for n in message:
@@ -339,22 +368,33 @@ def decrypt():
             decrypted_char = decrypted_char**2 % N
             if int(m) == 1:
                 decrypted_char = decrypted_char*int(n) % N
-        if input_encoding_method.get() == "ASCII":
+        if input_encoding_method.get() == "ASCII" or input_encoding_method.get() == "None":
             decrypted_char = str(decrypted_char)
             while len(decrypted_char) % input_number_of_chars.get() != 0:
                 decrypted_char = "0"+decrypted_char
             segments = int(len(decrypted_char)/input_number_of_chars.get())
-            for m in range(input_number_of_chars.get()):
-                message.append(chr(
-                    int(decrypted_char[m*segments:(m+1)*segments])))
-                print(
-                    f"decrypt({n}) = {decrypted_char}; char({decrypted_char[m*segments:(m+1)*segments]}) = {message[-1]}")
+            if (input_encoding_method.get() == "ASCII"):
+                for m in range(input_number_of_chars.get()):
+                    message.append(chr(
+                        int(decrypted_char[m*segments:(m+1)*segments])))
+                    print(
+                        f"decrypt({n}) = {decrypted_char}; char({decrypted_char[m*segments:(m+1)*segments]}) = {message[-1]}")
+            else:
+                for m in range(input_number_of_chars.get()):
+                    message.append(
+                        decrypted_char[m*segments:(m+1)*segments])
+                    print(
+                        f"decrypt({n}) = {decrypted_char}; {message[-1]}")
         else:
             message.append(chr(decrypted_char))
             print(f"decrypt({n}) = {decrypted_char} = {message[-1]}")
     end_message = ""
-    for n in range(len(message)):
-        end_message = end_message + message[n]
+    if input_encoding_method.get() == "None":
+        for n in range(len(message)):
+            end_message = end_message + " " + message[n]
+    else:
+        for n in range(len(message)):
+            end_message = end_message + message[n]
     Dialogs.input_Str(root, "Encryption",
                       "Your decrypted message:", end_message)
 
