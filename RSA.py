@@ -1,6 +1,7 @@
 from math import sqrt, gcd
 import math
 import random
+from typing import Counter
 import Dialogs
 import tkinter as tk
 from tkinter import font, messagebox
@@ -391,17 +392,23 @@ style_button_define_key_auto = {"text": "Define key automatic", "command": defin
 style_button_define_key_directly = {"text": "Define key directly", "command": define_key_directly,
                                     "background": "#EEEEEE", "activebackground": "#DDDDDD",  "cursor": "pencil", "borderwidth": 1}
 
+style_number_of_chars = {
+    "text": "Number of letters"}
+style_encoding_methods = {
+    "text": "Encoding methods"}
 style_input_number_of_chars_1 = {
     "text": "only 1 letter", "variable": input_number_of_chars, "value": 1, "state": tk.DISABLED}
 style_input_number_of_chars_2 = {
     "text": "every 2 letters", "variable": input_number_of_chars, "value": 2, "state": tk.DISABLED}
 style_input_number_of_chars_spinbox = {
-    "text": "only 1 letter", "textvariable": input_number_of_chars,  "from_": 1, "to": 10, "increment": 1, "state": tk.DISABLED}
+    "textvariable": input_number_of_chars,  "from_": 1, "to": 10, "increment": 1, "state": tk.DISABLED}
 
 style_input_encoding_method_ASCII = {
     "text": "ASCII", "variable": input_encoding_method, "value": "ASCII", "command": activate_radiobuttons}
 style_input_encoding_method_UNICODE = {
     "text": "UNICODE", "variable": input_encoding_method, "value": "UNICODE", "command": deactivate_radiobuttons}
+style_input_encoding_method_None = {
+    "text": "None", "variable": input_encoding_method, "value": "None", "command": activate_radiobuttons}
 
 
 string_d.bind("<Enter>", start_hover)
@@ -410,6 +417,7 @@ string_d.bind("<Leave>", end_hover)
 # ----------- create and place buttons -----------
 tk.Label(root, **style_title_RSA).grid(
     column=0, row=0, columnspan=4)
+
 
 button_define_key = tk.Button(root, **style_button_define_key)
 button_define_key.grid(column=0, row=1, columnspan=2,
@@ -429,24 +437,42 @@ button_encrypt.grid(column=0, row=5, columnspan=2, sticky=tk.N+tk.E+tk.S+tk.W)
 button_decrypt = tk.Button(root, **style_button_decrypt)
 button_decrypt.grid(column=2, row=5, sticky=tk.N+tk.E+tk.S+tk.W)
 
+
+number_of_chars = tk.LabelFrame(root, **style_number_of_chars)
+number_of_chars.grid(column=0, row=6, columnspan=2)
+
+encoding_methods = tk.LabelFrame(root, **style_encoding_methods)
+encoding_methods.grid(column=2, row=6)
+
+
 input_number_of_chars_1 = tk.Radiobutton(root, **style_input_number_of_chars_1)
-input_number_of_chars_1.grid(column=0, row=6, columnspan=2, sticky=tk.W)
+input_number_of_chars_1.grid(
+    in_=number_of_chars, column=0, row=0,  sticky=tk.W)
 
 input_number_of_chars_2 = tk.Radiobutton(root, **style_input_number_of_chars_2)
-input_number_of_chars_2.grid(column=0, row=7, columnspan=2, sticky=tk.W)
+input_number_of_chars_2.grid(
+    in_=number_of_chars, column=0, row=1,  sticky=tk.W)
 
 input_number_of_chars_spinbox = tk.Spinbox(
     root, **style_input_number_of_chars_spinbox)
-input_number_of_chars_spinbox.grid(column=0, row=8, columnspan=2, sticky=tk.W)
+input_number_of_chars_spinbox.grid(
+    in_=number_of_chars, column=0, row=2, sticky=tk.W)
+
 
 input_encoding_method_ASCII = tk.Radiobutton(
     root, **style_input_encoding_method_ASCII)
-input_encoding_method_ASCII.grid(column=2, row=6, sticky=tk.W)
+input_encoding_method_ASCII.grid(
+    in_=encoding_methods, column=0, row=0, sticky=tk.W)
 
 input_encoding_method_UNICODE = tk.Radiobutton(
     root, **style_input_encoding_method_UNICODE)
-input_encoding_method_UNICODE.grid(column=2, row=7, sticky=tk.W)
+input_encoding_method_UNICODE.grid(
+    in_=encoding_methods, column=0, row=1, sticky=tk.W)
 
+input_encoding_method_None = tk.Radiobutton(
+    root, **style_input_encoding_method_None)
+input_encoding_method_None.grid(
+    in_=encoding_methods, column=0, row=2, sticky=tk.W)
 
 if __name__ == "__main__":
     root.mainloop()
