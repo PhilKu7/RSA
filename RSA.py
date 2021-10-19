@@ -234,8 +234,8 @@ def define_key_directly():
                           "What is your encipher number? (e)", 17)
     d = Dialogs.input_Int(root, "Input key manually",
                           "What is your decipher number? (d)", 113)
-    string_e_N.config(text=f"e = {e}\nN = {N}")
-    string_d.config(text=f"d = {d}")
+    string_var_e_N.set(f"e = {e}\nN = {N}")
+    string_var_d.set(f"d = {d}")
 
 
 def encrypt():
