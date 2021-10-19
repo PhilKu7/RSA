@@ -25,17 +25,26 @@ input_encoding_method.set("UNICODE")
 menu = tk.Menu(root)
 root.config(menu=menu)
 
-string_var_e_N = tk.StringVar()
-string_var_e_N.set("")
-
+string_var_N = tk.StringVar()
+string_var_N.set("")
+string_var_e = tk.StringVar()
+string_var_e.set("")
 string_var_d = tk.StringVar()
 string_var_d.set("")
 
-string_e_N = tk.Label(root, textvariable=string_var_e_N)
-string_e_N.grid(column=0, row=2)
+string_N_label = tk.Label(root, text="N:")
+string_N_label.grid(column=0, row=2)
+string_e_label = tk.Label(root, text="e:")
+string_e_label.grid(column=0, row=3)
+string_d_label = tk.Label(root, text="d:")
+string_d_label.grid(column=0, row=4)
 
-string_d = tk.Label(root, textvariable=string_var_d)
-string_d.grid(column=0, row=3)
+string_N = tk.Entry(root, textvariable=string_var_N)
+string_N.grid(column=1, row=2)
+string_e = tk.Entry(root, textvariable=string_var_e)
+string_e.grid(column=1, row=3)
+string_d = tk.Entry(root, textvariable=string_var_d)
+string_d.grid(column=1, row=4)
 
 
 N = None
@@ -185,8 +194,9 @@ def define_key_auto():
             break
     N, phi_n, d, e = local_N, local_phi_n, local_d, local_e
     print(f"e = {e}, d = {d}, N = {N}")
-    string_var_e_N.set(f"e = {e}\nN = {N}")
-    string_var_d.set(f"d = {d}")
+    string_var_N.set(N)
+    string_var_e.set(e)
+    string_var_d.set(d)
 
 
 def define_key():
@@ -219,8 +229,9 @@ def define_key():
             raise_error(error)
     N, phi_n, d, e = local_N, local_phi_n, local_d, local_e
     print(f"e = {e}, d = {d}, N = {N}")
-    string_var_e_N.set(f"e = {e}\nN = {N}")
-    string_var_d.set(f"d = {d}")
+    string_var_N.set(N)
+    string_var_e.set(e)
+    string_var_d.set(d)
 
 
 def define_key_directly():
@@ -229,13 +240,14 @@ def define_key_directly():
     global N
     global d
     global e
-    N = Dialogs.input_Int(root, "Input key manually", "What is your N", 187)
-    e = Dialogs.input_Int(root, "Input key manually",
+    N = Dialogs.input_Int(root, "Input key directly", "What is your N", 187)
+    e = Dialogs.input_Int(root, "Input key directly",
                           "What is your encipher number? (e)", 17)
-    d = Dialogs.input_Int(root, "Input key manually",
+    d = Dialogs.input_Int(root, "Input key directly",
                           "What is your decipher number? (d)", 113)
-    string_var_e_N.set(f"e = {e}\nN = {N}")
-    string_var_d.set(f"d = {d}")
+    string_var_N.set(N)
+    string_var_e.set(e)
+    string_var_d.set(d)
 
 
 def encrypt():
@@ -292,7 +304,6 @@ def encrypt():
         for n in message:
             encrypted_char = int(n)
             e_bin = format(e, "b")
-            print(e_bin)
             for m in e_bin[1:]:
                 encrypted_char = encrypted_char**2 % N
                 if int(m) == 1:
@@ -359,6 +370,14 @@ def activate_radiobuttons():
     input_number_of_chars_spinbox.config(state=tk.NORMAL)
 
 
+def start_hover(temp=0):
+    string_d.config(show="")
+
+
+def end_hover(temp=0):
+    string_d.config(show="*")
+
+
 # ----------- style labels -----------
 style_title_RSA = {"text": "RSA Encryption", "font": font.BOLD}
 style_button_encrypt = {"text": "Encrypt text", "command": encrypt, "background": "#7CFC00",
@@ -385,44 +404,48 @@ style_input_encoding_method_UNICODE = {
     "text": "UNICODE", "variable": input_encoding_method, "value": "UNICODE", "command": deactivate_radiobuttons}
 
 
+string_d.bind("<Enter>", start_hover)
+string_d.bind("<Leave>", end_hover)
+
 # ----------- create and place buttons -----------
 tk.Label(root, **style_title_RSA).grid(
-    column=0, row=0, columnspan=3)
+    column=0, row=0, columnspan=4)
 
 button_define_key = tk.Button(root, **style_button_define_key)
-button_define_key.grid(column=0, row=1, sticky=tk.N+tk.E+tk.S+tk.W)
+button_define_key.grid(column=0, row=1, columnspan=2,
+                       sticky=tk.N+tk.E+tk.S+tk.W)
 
 button_define_key_auto = tk.Button(root, **style_button_define_key_auto)
-button_define_key_auto.grid(column=1, row=1, sticky=tk.N+tk.E+tk.S+tk.W)
+button_define_key_auto.grid(column=2, row=1, sticky=tk.N+tk.E+tk.S+tk.W)
 
 button_define_key_directly = tk.Button(
     root, **style_button_define_key_directly)
 button_define_key_directly.grid(
-    column=1, row=2, rowspan=2, sticky=tk.N+tk.E+tk.S+tk.W)
+    column=2, row=2, rowspan=3, sticky=tk.N+tk.E+tk.S+tk.W)
 
 button_encrypt = tk.Button(root, **style_button_encrypt)
-button_encrypt.grid(column=0, row=4, sticky=tk.N+tk.E+tk.S+tk.W)
+button_encrypt.grid(column=0, row=5, columnspan=2, sticky=tk.N+tk.E+tk.S+tk.W)
 
 button_decrypt = tk.Button(root, **style_button_decrypt)
-button_decrypt.grid(column=1, row=4, sticky=tk.N+tk.E+tk.S+tk.W)
+button_decrypt.grid(column=2, row=5, sticky=tk.N+tk.E+tk.S+tk.W)
 
 input_number_of_chars_1 = tk.Radiobutton(root, **style_input_number_of_chars_1)
-input_number_of_chars_1.grid(column=0, row=5, sticky=tk.W)
+input_number_of_chars_1.grid(column=0, row=6, columnspan=2, sticky=tk.W)
 
 input_number_of_chars_2 = tk.Radiobutton(root, **style_input_number_of_chars_2)
-input_number_of_chars_2.grid(column=0, row=6, sticky=tk.W)
+input_number_of_chars_2.grid(column=0, row=7, columnspan=2, sticky=tk.W)
 
 input_number_of_chars_spinbox = tk.Spinbox(
     root, **style_input_number_of_chars_spinbox)
-input_number_of_chars_spinbox.grid(column=0, row=7, sticky=tk.W)
+input_number_of_chars_spinbox.grid(column=0, row=8, columnspan=2, sticky=tk.W)
 
 input_encoding_method_ASCII = tk.Radiobutton(
     root, **style_input_encoding_method_ASCII)
-input_encoding_method_ASCII.grid(column=1, row=5, sticky=tk.W)
+input_encoding_method_ASCII.grid(column=2, row=6, sticky=tk.W)
 
 input_encoding_method_UNICODE = tk.Radiobutton(
     root, **style_input_encoding_method_UNICODE)
-input_encoding_method_UNICODE.grid(column=1, row=6, sticky=tk.W)
+input_encoding_method_UNICODE.grid(column=2, row=7, sticky=tk.W)
 
 
 if __name__ == "__main__":
