@@ -291,59 +291,74 @@ def decrypt():
                       "Your decrypted message:", end_message)
 
 
-# ----------- style labels -----------
-label_title_RSA = {"text": "RSA Encryption", "font": font.BOLD}
-label_button_encrypt = {"text": "Encrypt text", "command": encrypt, "background": "#7CFC00",
-                        "activebackground": "#80FF07",  "cursor": "exchange", "borderwidth": 5}
-label_button_decrypt = {"text": "Decrypt text", "command": decrypt, "background": "#40E0D0",
-                        "activebackground": "#48D1CC", "cursor": "exchange", "borderwidth": 5}
-label_button_define_key = {"text": "Define key manually", "command": define_key,
-                           "background": "#FFFF00", "activebackground": "#FFF000",  "cursor": "pencil", "borderwidth": 5}
-label_button_define_key_auto = {"text": "Define key automatic", "command": define_key_auto,
-                                "background": "#FFFF00", "activebackground": "#FFF000", "cursor": "pencil", "borderwidth": 5}
-label_input_number_of_chars_1 = {
-    "text": "only 1 letter", "variable": input_number_of_chars, "value": 1}
-label_input_number_of_chars_2 = {
-    "text": "every 2 letters", "variable": input_number_of_chars, "value": 2}
-label_input_encoding_method_ASCII = {
-    "text": "ASCII", "variable": input_encoding_method, "value": "ASCII"}
-label_input_encoding_method_UNICODE = {
-    "text": "UNICODE", "variable": input_encoding_method, "value": "UNICODE"}
+def deactivate_radiobuttons():
+    input_number_of_chars_1.config(state=tk.DISABLED)
+    input_number_of_chars_2.config(state=tk.DISABLED)
+    input_number_of_chars_spinbox.config(state=tk.DISABLED)
 
-label_input_number_of_chars = {
-    "text": "only 1 letter", "textvariable": input_number_of_chars,  "from_": 1, "to": 10, "increment": 1}
+
+def activate_radiobuttons():
+    input_number_of_chars_1.config(state=tk.NORMAL)
+    input_number_of_chars_2.config(state=tk.NORMAL)
+    input_number_of_chars_spinbox.config(state=tk.NORMAL)
+
+
+# ----------- style labels -----------
+style_title_RSA = {"text": "RSA Encryption", "font": font.BOLD}
+style_button_encrypt = {"text": "Encrypt text", "command": encrypt, "background": "#7CFC00",
+                        "activebackground": "#80FF07",  "cursor": "exchange", "borderwidth": 5}
+style_button_decrypt = {"text": "Decrypt text", "command": decrypt, "background": "#40E0D0",
+                        "activebackground": "#48D1CC", "cursor": "exchange", "borderwidth": 5}
+style_button_define_key = {"text": "Define key manually", "command": define_key,
+                           "background": "#FFFF00", "activebackground": "#FFF000",  "cursor": "pencil", "borderwidth": 5}
+style_button_define_key_auto = {"text": "Define key automatic", "command": define_key_auto,
+                                "background": "#FFFF00", "activebackground": "#FFF000", "cursor": "pencil", "borderwidth": 5}
+
+style_input_number_of_chars_1 = {
+    "text": "only 1 letter", "variable": input_number_of_chars, "value": 1, "state": tk.DISABLED}
+style_input_number_of_chars_2 = {
+    "text": "every 2 letters", "variable": input_number_of_chars, "value": 2, "state": tk.DISABLED}
+style_input_number_of_chars_spinbox = {
+    "text": "only 1 letter", "textvariable": input_number_of_chars,  "from_": 1, "to": 10, "increment": 1, "state": tk.DISABLED}
+
+style_input_encoding_method_ASCII = {
+    "text": "ASCII", "variable": input_encoding_method, "value": "ASCII", "command": activate_radiobuttons}
+style_input_encoding_method_UNICODE = {
+    "text": "UNICODE", "variable": input_encoding_method, "value": "UNICODE", "command": deactivate_radiobuttons}
+
 
 # ----------- create and place buttons -----------
-tk.Label(root, **label_title_RSA).grid(
+tk.Label(root, **style_title_RSA).grid(
     column=0, row=0, columnspan=3)
 
-button_define_key = tk.Button(root, **label_button_define_key)
+button_define_key = tk.Button(root, **style_button_define_key)
 button_define_key.grid(column=0, row=1, sticky=tk.N+tk.E+tk.S+tk.W)
 
-button_define_key_auto = tk.Button(root, **label_button_define_key_auto)
+button_define_key_auto = tk.Button(root, **style_button_define_key_auto)
 button_define_key_auto.grid(column=1, row=1, sticky=tk.N+tk.E+tk.S+tk.W)
 
-button_encrypt = tk.Button(root, **label_button_encrypt)
+button_encrypt = tk.Button(root, **style_button_encrypt)
 button_encrypt.grid(column=0, row=3, sticky=tk.N+tk.E+tk.S+tk.W)
 
-button_decrypt = tk.Button(root, **label_button_decrypt)
+button_decrypt = tk.Button(root, **style_button_decrypt)
 button_decrypt.grid(column=1, row=3, sticky=tk.N+tk.E+tk.S+tk.W)
 
-input_number_of_chars_1 = tk.Radiobutton(root, **label_input_number_of_chars_1)
+input_number_of_chars_1 = tk.Radiobutton(root, **style_input_number_of_chars_1)
 input_number_of_chars_1.grid(column=0, row=4, sticky=tk.W)
 
-input_number_of_chars_2 = tk.Radiobutton(root, **label_input_number_of_chars_2)
+input_number_of_chars_2 = tk.Radiobutton(root, **style_input_number_of_chars_2)
 input_number_of_chars_2.grid(column=0, row=5, sticky=tk.W)
 
-input_number_of_chars_ = tk.Spinbox(root, **label_input_number_of_chars)
-input_number_of_chars_.grid(column=0, row=6, sticky=tk.W)
+input_number_of_chars_spinbox = tk.Spinbox(
+    root, **style_input_number_of_chars_spinbox)
+input_number_of_chars_spinbox.grid(column=0, row=6, sticky=tk.W)
 
 input_encoding_method_ASCII = tk.Radiobutton(
-    root, **label_input_encoding_method_ASCII)
+    root, **style_input_encoding_method_ASCII)
 input_encoding_method_ASCII.grid(column=1, row=4, sticky=tk.W)
 
 input_encoding_method_UNICODE = tk.Radiobutton(
-    root, **label_input_encoding_method_UNICODE)
+    root, **style_input_encoding_method_UNICODE)
 input_encoding_method_UNICODE.grid(column=1, row=5, sticky=tk.W)
 
 
