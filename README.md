@@ -8,4 +8,4 @@ To execute the program open RSA.py. This is how it looks like:
 
 ![image](https://user-images.githubusercontent.com/86799686/137764745-f8a5b872-abec-4851-beef-8641b28cc4b5.png)
 
-In the future other encryption methods might be following.
+In the future other encryption methods might be following and possibly the whole project might be changed to use the [ttk widgets of tkinter](https://www.pythontutorial.net/tkinter/tkinter-ttk/).
