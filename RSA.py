@@ -25,6 +25,8 @@ input_encoding_method.set("UNICODE")
 menu = tk.Menu(root)
 root.config(menu=menu)
 
+N = None
+
 
 def raise_error(error):
     messagebox.showerror(
@@ -191,10 +193,14 @@ def define_key():
 
 
 def encrypt():
+    if N is None:
+        raise_error(
+            "Error 1: You didn't define the keys yet.\nPlease do this at first!")
+        return
     message_string = Dialogs.input_Str(
         root, "Encryption", "What do you want to encrypt?", "Hello World!")
     while message_string == "":
-        raise_error("Error 1: your message to encrypt is empty")
+        raise_error("Error 1: Your message to encrypt is empty!")
         message_string = Dialogs.input_Str(
             root, "Encryption", "What do you want to encrypt?", "Hello World!")
     message = []
@@ -250,6 +256,10 @@ def encrypt():
 
 
 def decrypt():
+    if N is None:
+        raise_error(
+            "Error 1: You didn't define the keys yet.\nPlease do this at first!")
+        return
     C = Dialogs.input_Str(root, "Encryption",
                           "What do you want to decrypt?", "")
     if C == "":
