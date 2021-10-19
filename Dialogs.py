@@ -2,8 +2,6 @@
 for the RSA Encryption
 """
 import tkinter as tk
-from typing import Collection
-
 
 prt = None
 
