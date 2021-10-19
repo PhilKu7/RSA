@@ -39,11 +39,11 @@ string_e_label.grid(column=0, row=3)
 string_d_label = tk.Label(root, text="d:")
 string_d_label.grid(column=0, row=4)
 
-string_N = tk.Entry(root, textvariable=string_var_N)
+string_N = tk.Entry(root, textvariable=string_var_N, state=tk.DISABLED)
 string_N.grid(column=1, row=2)
-string_e = tk.Entry(root, textvariable=string_var_e)
+string_e = tk.Entry(root, textvariable=string_var_e, state=tk.DISABLED)
 string_e.grid(column=1, row=3)
-string_d = tk.Entry(root, textvariable=string_var_d)
+string_d = tk.Entry(root, textvariable=string_var_d, state=tk.DISABLED)
 string_d.grid(column=1, row=4)
 
 
