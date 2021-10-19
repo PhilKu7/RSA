@@ -25,6 +25,13 @@ input_encoding_method.set("UNICODE")
 menu = tk.Menu(root)
 root.config(menu=menu)
 
+string_e_N = tk.Label(root, text=f"")
+string_e_N.grid(column=0, row=2)
+
+string_d = tk.Label(root, text=f"")
+string_d.grid(column=1, row=2)
+
+
 N = None
 
 
@@ -122,13 +129,37 @@ def define_key_auto():
                           "What is your lower bound for your random numbers?", "10")
     g = Dialogs.input_Int(root, "Enter upper bound",
                           "What is your upper bound for your random numbers?", "100")
-    while h >= g:
+    error = False
+    if h >= g:
         raise_error(
-            f"Error 1: your first number ({h}) is bigger than your second number ({g})")
+            f"Error 1: your lower bound ({h}) is bigger than upper bound ({g})")
+        error = True
+    elif g < 3:
+        raise_error(
+            f"Error 1: your upper bound ({g}) is smaller than 3. Please use an upper bound higher than 2")
+        error = True
+    elif g > 9000000000000000:
+        raise_error(
+            f"Error 1: your upper bound ({g}) is bigger than 9000000000000000. Please use an upper bound smaller than this!\nHigher numbers cause overflow errors.")
+        error = True
+    while error:
+        error = False
         h = Dialogs.input_Int(
             root, "RSA", "What is your lower bound for your random numbers?", "10")
         g = Dialogs.input_Int(
             root, "RSA", "What is your upper bound for your random numbers?", "100")
+        if h >= g:
+            raise_error(
+                f"Error 1: your lower bound ({h}) is bigger than upper bound ({g})")
+            error = True
+        elif g < 3:
+            raise_error(
+                f"Error 1: your upper bound ({g}) is smaller than 3. Please use an upper bound higher than 2")
+            error = True
+        elif g > 9000000000000000:
+            raise_error(
+                f"Error 1: your upper bound ({g}) is bigger than 9000000000000000. Please use an upper bound smaller than this!\nHigher numbers cause overflow errors.")
+            error = True
     p = input_prime(True)
     q = input_prime(True)
     while p == q:
@@ -139,20 +170,17 @@ def define_key_auto():
     local_e = random.randint(1, local_phi_n/2)
     while local_e < local_phi_n:
         local_e += 1
-        if (gcd(local_e, local_phi_n) != 1):
-            continue
         g, u, v = extended_gcd(local_e, local_phi_n)
         local_d = u % local_phi_n
+        if (gcd(local_e, local_phi_n) != 1):
+            continue
         error = check_error(local_e, local_phi_n, local_d, local_N)
         if not error:
             break
     N, phi_n, d, e = local_N, local_phi_n, local_d, local_e
     print(f"e = {e}, d = {d}, N = {N}")
-    string_e_N = tk.Label(root, text=f"e = {e}\nN = {N}")
-    string_e_N.grid(column=0, row=2)
-
-    string_d = tk.Label(root, text=f"d = {d}")
-    string_d.grid(column=1, row=2)
+    string_e_N.config(text=f"e = {e}\nN = {N}")
+    string_d.config(text=f"d = {d}")
 
 
 def define_key():
@@ -185,11 +213,8 @@ def define_key():
             raise_error(error)
     N, phi_n, d, e = local_N, local_phi_n, local_d, local_e
     print(f"e = {e}, d = {d}, N = {N}")
-    string_e_N = tk.Label(root, text=f"e = {e}\nN = {N}")
-    string_e_N.grid(column=0, row=2)
-
-    string_d = tk.Label(root, text=f"d = {d}")
-    string_d.grid(column=1, row=2)
+    string_e_N.config(text=f"e = {e}\nN = {N}")
+    string_d.config(text=f"d = {d}")
 
 
 def encrypt():
